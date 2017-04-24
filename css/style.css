@@ -1,0 +1,24 @@
+/* CSS Global : */
+
+*{ margin: 0; }
+body{ font-family : verdana; font-size: 12px; }
+a{ text-decoration: none; color: #000; }
+.conteneur{ margin: 0 auto; max-width: 1170px;}
+
+
+/* Page produit : */
+
+#produit-photo > img {
+    max-width: 800px;
+    max-width: 100%;
+}
+
+
+#produit-etoile > img {
+    height: 20px;
+    max-width: 100%;
+}
+
+.produit-complementaire > img {
+    max-width: 100%;
+}
