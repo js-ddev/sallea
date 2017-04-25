@@ -1,7 +1,6 @@
-<?php 
+<?php
 
 require('inc/init.inc.php');
-
 
 // requete colonne gauche :
 $result = $pdo -> query("select distinct ville from salle order by ville");
@@ -13,6 +12,7 @@ $prix = $pdo -> query("select distinct prix from produit order by prix");
 // requete colonne droite :
 /*$resultat = $pdo -> query(
 "select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville 
+
 from salle s, produit p
 where s.id_salle = p.id_salle");
 
@@ -80,10 +80,9 @@ debug($resultats);
 
 
 $page = 'Boutique';
-require('inc/header.inc.php');
+require('inc/header.inc-modal.php');
 
 ?>
-
 
 <div class="container"> <!-- DEBUT BLOC CONTENER GLOBAL -->
 
@@ -93,11 +92,11 @@ require('inc/header.inc.php');
 			<form>
 				<label class="form-group">Catégorie</label><br/>
 				<select class="form-control">
+
 					<option value="reunion">Réunion</option>
 					<option value="bureau">Bureau</option>
 					<option value="formation">Formation</option>
 				</select><br/><br/>
-				
 
 				<label class="form-group">Ville</label><br/>
 				<select class="form-control">
@@ -200,10 +199,3 @@ require('inc/header.inc.php');
 			
 
 		
-
-
-
-
-
-
-

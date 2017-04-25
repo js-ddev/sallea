@@ -32,9 +32,10 @@ if($_POST){
 
 // TRAITEMENT pour afficher les produits suggérés :
 // Requete pour récupérer des produits de la même catégorie (sauf celui qu'on visite)
-$resultatProduit = $pdo -> query("SELECT p.id_produit, p.id_salle, p.prix, s.photo, s.categories FROM produit p, salle s WHERE p.id_salle = s.id_salle AND categories = '$categories' AND p.id_produit != $_GET[id]");
+
+$resultatProduit = $pdo -> query("SELECT DISTINCT p.id_produit, p.id_salle, p.prix, s.photo, s.categories FROM produit p, salle s WHERE p.id_salle = s.id_salle AND categories = '$categories' AND p.id_produit != $_GET[id] LIMIT 0,4");
 $suggestion = $resultatProduit -> fetchAll(PDO::FETCH_ASSOC);
-debug($suggestion);
+// debug($suggestion);
 
 // Création de panier en session :
 //     if(!isset($_SESSION['panier'])){
@@ -49,7 +50,7 @@ debug($suggestion);
 
 
 $page = 'Produit';
-require_once('inc/header.inc.php');
+require_once('inc/header.inc-modal.php');
 ?>
 
 <div class="row">
@@ -77,8 +78,8 @@ require_once('inc/header.inc.php');
         </div>
     </div>
 </div>
+<h2>Informations complémentaires</h2>
 <div class="row">
-    <h2>Informations complémentaires</h2>
         <div class="col-md-4">
             <p>Arrivée : <?= $date_arrivee ?></p>
             <p>Départ : <?= $date_depart ?></p>
@@ -92,11 +93,11 @@ require_once('inc/header.inc.php');
             <p>Tarif : <?= $prix ?></p>
         </div>
 </div>
-<h2>Autres produits</h2>
+<h2>Autres produits de notre catégorie <?= $categories ?></h2>
 <div class="row">
     <?php for ($i=0; $i < sizeof($suggestion); $i++) : ?>
         <div class="produit-complementaire col-md-3">
-            <img src="<?=RACINE_SITE?>photo/<?=$suggestion[$i]['photo']?>">
+            <a href="<?=RACINE_SITE?>fiche_produit.php?id=<?=$suggestion[$i]['id_produit']?>"><img src="<?=RACINE_SITE?>photo/<?=$suggestion[$i]['photo']?>"></a>
         </div>
     <?php endfor; ?>
 </div>

@@ -14,6 +14,7 @@ function debug($arg){
 
 // Fonction pour savoir si l'utilisateur est connecté :
 function userConnecte(){
+    // if(isset($_SESSION['membre']) && !empty($_SESSION['membre']['id_membre'])){
     if(isset($_SESSION['membre'])){
         return TRUE;
     }
@@ -30,6 +31,24 @@ function userAdmin(){
     else {
         return FALSE;
     }
+}
+
+
+// Fonction pour calculer le montant total du panier (ici commande)
+function montantTotal(){
+    $total = 0;
+
+    if(isset($_SESSION['panier']) && !empty($_SESSION['panier']['prix'])){
+
+        for($i=0; $i < count($_SESSION['panier']['prix']); $i++){
+            $total += $_SESSION['panier']['prix'][$i];
+        }
+    }
+
+    if($total != 0){
+        return $total;
+    }
+
 }
 
 
