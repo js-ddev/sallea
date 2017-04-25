@@ -33,4 +33,22 @@ function userAdmin(){
 }
 
 
+// Fonction pour calculer le montant total du panier (ici commande)
+function montantTotal(){
+    $total = 0;
+
+    if(isset($_SESSION['panier']) && !empty($_SESSION['panier']['prix'])){
+
+        for($i=0; $i < count($_SESSION['panier']['prix']); $i++){
+            $total += $_SESSION['panier']['prix'][$i];
+        }
+    }
+
+    if($total != 0){
+        return $total;
+    }
+
+}
+
+
 ?>
