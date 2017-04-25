@@ -8,7 +8,7 @@ if(!userConnecte()){
 
 extract($_SESSION['membre']);
 
-//Traitement pour récupérer les commandes correspondantes à cet utilisateur : 
+//Traitement pour récupérer les commandes correspondantes à cet utilisateur :
 $resultat = $pdo -> query("SELECT id_commande, id_membre, id_produit, date_format(date_enregistrement, '%d/%m/%Y') as date_commande FROM commande WHERE id_membre = $id_membre ORDER BY  date_enregistrement DESC ");
 $commande = $resultat -> fetchAll(PDO::FETCH_ASSOC);
 
@@ -21,14 +21,14 @@ else{
 }
 
 $page = 'Profil';
-require_once('inc/header.inc.php');
+require_once('inc/header.inc-modal.php');
 ?>
 <h1>Profil de <?= $pseudo ?> </h1>
 
 <div class="profil">
 	<p>Bonjour <?= $pseudo ?> !!</p><br/>
-	
-	<div class="profil_img"> 
+
+	<div class="profil_img">
 		<img src="img/default.png" />
 	</div>
 	<div class="profil_infos">
@@ -64,19 +64,19 @@ require_once('inc/header.inc.php');
 			$id_commande = $commande[$i]['id_commande'];
 			$resultat = $pdo -> query(
 			//"SELECT p.id_produit, d.quantite, d.prix, p.photo, p.titre
-			"SELECT 
-			c.date_enregistrement, 
-			p.id_produit, 
+			"SELECT
+			c.date_enregistrement,
+			p.id_produit,
 			p.date_arrivee,
-			p.date_depart, 
-			p.prix, s.titre, 
-			s.description, 
-			s.capacite, 
-			s.categories, 
-			s.photo, 
-			s.adresse, 
-			s.cp, 
-			s.ville, 
+			p.date_depart,
+			p.prix, s.titre,
+			s.description,
+			s.capacite,
+			s.categories,
+			s.photo,
+			s.adresse,
+			s.cp,
+			s.ville,
 			s.pays
 			FROM commande d, produit p, salle p
 			WHERE c.id_produit = p.id_produit
@@ -84,14 +84,14 @@ require_once('inc/header.inc.php');
 			AND c.id_commande = $id_commande"
 			);
 
-			// date_format(date_arrivee, '%d/%m/%Y') as date_d_arrivee 
+			// date_format(date_arrivee, '%d/%m/%Y') as date_d_arrivee
 
 			$date_d_arrivee = date_format(date_arrivee, '%d/%m/%Y');
 			$date_depart = date_format(date_depart, '%d/%m/%Y');
-			
+
 			$details = $resultat -> fetchAll(PDO::FETCH_ASSOC);
 			foreach($details as $indice => $valeur){
-				
+
 				echo '<hr/><img src="photo/' . $valeur['photo'] . '" width="30"/>';
 				echo '<p>
 				Produit : ' . $valeur['titre'] . '<br/>
@@ -104,7 +104,7 @@ require_once('inc/header.inc.php');
 				Date d\'arrivée : ' . $date_d_arrivee . '<br/>
 				Date de départ : ' . $date_depart . '<br/>
 				Prix : ' . $valeur['prix'] . '€ttc<br/>
-				</p>';  
+				</p>';
 			}
 			?>
 		<?php endfor; ?>
