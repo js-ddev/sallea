@@ -32,6 +32,7 @@ if($_POST){
 
 // TRAITEMENT pour afficher les produits suggérés :
 // Requete pour récupérer des produits de la même catégorie (sauf celui qu'on visite)
+
 $resultatProduit = $pdo -> query("SELECT DISTINCT p.id_produit, p.id_salle, p.prix, s.photo, s.categories FROM produit p, salle s WHERE p.id_salle = s.id_salle AND categories = '$categories' AND p.id_produit != $_GET[id] LIMIT 0,4");
 $suggestion = $resultatProduit -> fetchAll(PDO::FETCH_ASSOC);
 // debug($suggestion);
