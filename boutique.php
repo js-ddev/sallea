@@ -1,14 +1,14 @@
-<?php 
+<?php
 
 require('inc/init.inc.php');
 
 $resultat = $pdo -> query("SELECT * FROM produit");
 $produits = $resultat -> fetchAll(PDO::FETCH_ASSOC);
 
-debug($produits);
+// debug($produits);
 
 $page = 'Boutique';
-require('inc/header.inc.php');
+require('inc/header.inc-modal.php');
 
 
 
@@ -20,7 +20,7 @@ require('inc/header.inc.php');
 
 
 <div id="row" style="width: 90%; margin: 5vh auto">
-	
+
 	<div class="col-sm-6 col-lg-4 col-md-2">
 		<form>
 			<label>Catégorie</label><br/>
@@ -76,7 +76,7 @@ require('inc/header.inc.php');
 <?php  for($i=0; $i< sizeof($produits); $i++) : ?>
 	<div class="thumbnail">
 		<img src="photos/salle1.jpg" alt="">
-		<div class="caption"> 
+		<div class="caption">
 			<h4 class="pull-right"><?= $produits[$i]['prix'] ?></h4>
 			<h4><a href="">Titre du produit</a>
 			</h4>
@@ -97,5 +97,3 @@ require('inc/header.inc.php');
 </div>
 
 </div>
-
-
