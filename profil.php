@@ -10,7 +10,7 @@ if(!userConnecte()){
 
 extract($_SESSION['membre']);
 
-//Traitement pour récupérer les commandes correspondantes à cet utilisateur : 
+//Traitement pour récupérer les commandes correspondantes à cet utilisateur :
 $resultat = $pdo -> query("SELECT id_commande, id_membre, id_produit, date_format(date_enregistrement, '%d/%m/%Y') as date_commande FROM commande WHERE id_membre = $id_membre ORDER BY  date_enregistrement DESC ");
 $commande = $resultat -> fetchAll(PDO::FETCH_ASSOC);
 
@@ -23,14 +23,14 @@ else{
 }
 
 $page = 'Profil';
-require_once('inc/header.inc.php');
+require_once('inc/header.inc-modal.php');
 ?>
 <h1>Profil de <?= $pseudo ?> </h1>
 
 <div class="profil">
 	<p>Bonjour <?= $pseudo ?> !!</p><br/>
-	
-	<div class="profil_img"> 
+
+	<div class="profil_img">
 		<img src="img/default.png" />
 	</div>
 	<div class="profil_infos">
@@ -66,7 +66,8 @@ require_once('inc/header.inc.php');
 
 			$id_commande = $commande[$i]['id_commande'];
 			$resultat = $pdo -> query(
-			"SELECT 
+
+      "SELECT 
 			c.date_enregistrement, 
 			p.id_produit, 
 			date_format(p.date_arrivee, '%d/%m/%Y') as date_arrivee, 
@@ -87,13 +88,12 @@ require_once('inc/header.inc.php');
 			AND c.id_commande = $id_commande"
 			);
 
-
 			$details = $resultat -> fetchAll(PDO::FETCH_ASSOC);
 			
 			// debug($details);
 
 			foreach($details as $indice => $valeur){
-				
+			
 				echo '<img src="photo/' . $valeur['photo'] . '" width="150"/>';
 				echo '<p>
 				Nom : ' . $valeur['titre'] . '<br/>
@@ -103,9 +103,11 @@ require_once('inc/header.inc.php');
 				<hr/>
 				Tarif de location : ' . $valeur['prix'] . '€ttc<br/>
 				<hr/>
+
 				Date d\'arrivée : ' . $valeur['date_arrivee'] . '<br/>
 				Date de départ : ' . $valeur['date_depart'] . '<br/>
 				</p>';  
+
 			}
 			?>
 

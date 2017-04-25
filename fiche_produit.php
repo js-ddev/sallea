@@ -49,7 +49,7 @@ $suggestion = $resultatProduit -> fetchAll(PDO::FETCH_ASSOC);
 
 
 $page = 'Produit';
-require_once('inc/header.inc.php');
+require_once('inc/header.inc-modal.php');
 ?>
 
 <div class="row">

@@ -72,25 +72,25 @@ require_once('inc/header.inc.php');
 <form class="" action="" method="post">
     <label for="pseudo">Pseudo</label>
     <input type="text" name="pseudo" value="">
-
+    <br>
     <label for="mdp">Mot de passe</label>
     <input type="password" name="mdp" value="">
-
+    <br>
     <label for="nom">Nom</label>
     <input type="text" name="nom" value="">
-
+    <br>
     <label for="prenom">Prénom</label>
     <input type="text" name="prenom" value="">
-
+    <br>
     <label for="email">Email</label>
     <input type="text" name="email" value="">
-
+    <br>
     <label for="civilite">Civilité</label>
     <select class="" name="civilite">
         <option value="m">Homme</option>
         <option value="f">Femme</option>
     </select>
-
+    <br>
     <input type="submit" value="connexion">
 </form>
 
