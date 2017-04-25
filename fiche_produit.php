@@ -3,7 +3,7 @@ require_once('inc/init.inc.php');
 
 // récupère l'id dans l'url :
 if(isset($_GET['id']) && !empty($_GET['id']) && is_numeric($_GET['id'])){
-    $resultat = $pdo -> prepare("SELECT p.date_arrivee, p.date_depart, p.prix, s.titre, s.description, s.photo, s.pays, s.ville, s.adresse, s.cp, s.capacite, s.categories FROM produit p, salle s WHERE s.id_salle = p.id_salle");
+    $resultat = $pdo -> prepare("SELECT p.id_produit, p.id_salle, p.date_arrivee, p.date_depart, p.prix, s.titre, s.description, s.photo, s.pays, s.ville, s.adresse, s.cp, s.capacite, s.categories FROM produit p, salle s WHERE p.id_salle = s.id_salle AND p.id_produit = :id");
     $resultat -> bindParam(':id', $_GET['id'], PDO::PARAM_INT);
     $resultat -> execute();
 
@@ -15,11 +15,37 @@ if(isset($_GET['id']) && !empty($_GET['id']) && is_numeric($_GET['id'])){
     else {
         header('location:boutique.php');
     }
-
 }
-else{ // Pas d'id, ou id vide, ou pas un chiffre... = problème !
+else{
     header('location:boutique.php');
 }
+
+// Traitement d'ajour du produit dans la table commande :
+if($_POST){
+    // debug($_POST);
+    // debug($_SESSION);
+    $requete = $pdo -> prepare("INSERT INTO commande(id_membre,id_produit,date_enregistrement) VALUES (:membre,:id_produit,NOW())");
+    $requete -> bindParam(':membre', $_SESSION['membre']['id_membre'], PDO::PARAM_INT);
+    $requete -> bindParam(':id_produit', $_POST['id_produit'], PDO::PARAM_INT);
+    $requete -> execute();
+}
+
+// TRAITEMENT pour afficher les produits suggérés :
+// Requete pour récupérer des produits de la même catégorie (sauf celui qu'on visite)
+$resultatProduit = $pdo -> query("SELECT p.id_produit, p.id_salle, p.prix, s.photo, s.categories FROM produit p, salle s WHERE p.id_salle = s.id_salle AND categories = '$categories' AND p.id_produit != $_GET[id]");
+$suggestion = $resultatProduit -> fetchAll(PDO::FETCH_ASSOC);
+debug($suggestion);
+
+// Création de panier en session :
+//     if(!isset($_SESSION['panier'])){
+//         $_SESSION['panier'] = array();
+//         $_SESSION['panier']['id_produit'] = array();
+//         $_SESSION['panier']['id_produit'][] = $id_produit;
+//     }
+//     else{
+//         $_SESSION['panier']['id_produit'][] = $id_produit;
+//     }
+// }
 
 
 $page = 'Produit';
@@ -32,11 +58,14 @@ require_once('inc/header.inc.php');
         <img src="<?= RACINE_SITE ?>img/star-2.png" alt="etoile">
     </div>
     <div class="col-md-4">
-        <button type="button" class="btn btn-default btn-success">Réserver</button>
+        <form action="" method="POST">
+            <input type="hidden" value="<?= $id_produit ?>" name="id_produit"/>
+            <input type="submit" class="btn btn-default btn-success" value="Réserver">
+        </form>
     </div>
 </div>
 <div class="row">
-    <div id="produit-photo" class="col-md-8"><img src="<?= RACINE_SITE ?>photo/salle1.jpg" alt=""></div>
+    <div id="produit-photo" class="col-md-8"><img src="<?= RACINE_SITE ?>photo/<?= $photo ?>" alt=""></div>
     <div class="col-md-4">
         <div class="col-md-12">
             <h2>Description</h2>
@@ -65,18 +94,11 @@ require_once('inc/header.inc.php');
 </div>
 <h2>Autres produits</h2>
 <div class="row">
-    <div class="produit-complementaire col-md-3">
-        <img src="<?= RACINE_SITE ?>photo/salle2.jpg" alt="autre salle">
-    </div>
-    <div class="produit-complementaire col-md-3">
-        <img src="<?= RACINE_SITE ?>photo/salle3.jpg" alt="autre salle">
-    </div>
-    <div class="produit-complementaire col-md-3">
-        <img src="<?= RACINE_SITE ?>photo/salle3.jpg" alt="autre salle">
-    </div>
-    <div class="produit-complementaire col-md-3">
-        <img src="<?= RACINE_SITE ?>photo/salle3.jpg" alt="autre salle">
-    </div>
+    <?php for ($i=0; $i < sizeof($suggestion); $i++) : ?>
+        <div class="produit-complementaire col-md-3">
+            <img src="<?=RACINE_SITE?>photo/<?=$suggestion[$i]['photo']?>">
+        </div>
+    <?php endfor; ?>
 </div>
 
 
