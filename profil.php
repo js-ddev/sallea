@@ -1,6 +1,8 @@
 <?php
 require_once('inc/init.inc.php');
 
+// debug($_SESSION);
+
 // traitement pour redirection si user n'est pas connecté
 if(!userConnecte()){
 	header('location:connexion.php');
@@ -42,34 +44,35 @@ require_once('inc/header.inc.php');
 </div>
 
 <div class="profil">
-	<h2>Détails des commandes <?= $nbre_commande ?></h2>
+
+	<h2>Détails de ma commande</h2>
+
 	<!-- S'il y a des commandes j'affiche les détails : -->
 	<?php if($resultat -> rowCount() > 0) : ?>
+
 		<!-- Pour chaque commande j'affiche les infos -->
 		<?php for($i = 0; $i < count($commande); $i ++) : ?>
+
+
 			<hr/><h4>Commande passé le <?= $commande[$i]['date_commande'] ?> : </h4>
-			<ul>
-				<li>Numéro de commande : <b><?= $commande[$i]['id_commande'] ?></b></li>
+			<p>Numéro de commande : <b><?= $commande[$i]['id_commande'] ?></b></p>
+			<hr/>
+			<p>Détails de la commande</p>
 
-<!-- //////////////////////////// -->
-<!-- Requête multi-table à faire -->
-				<li>Montant de la commande : <b><?= $commande[$i]['montant'] ?>€TTC</b></li>
-<!-- //////////////////////////// -->
-
-
-			</ul>
 
 			<?php
-			// Pour chaque commande, je récupère les détails dans la table details_commande ainsi que la table produit (pour récupérer les photos et les titres des produits).
+			// Pour chaque commande, je récupère les détails dans la table details_commande ainsi que la table produit et la table salle.
+
+
 			$id_commande = $commande[$i]['id_commande'];
 			$resultat = $pdo -> query(
-			//"SELECT p.id_produit, d.quantite, d.prix, p.photo, p.titre
 			"SELECT 
 			c.date_enregistrement, 
 			p.id_produit, 
-			p.date_arrivee,
-			p.date_depart, 
-			p.prix, s.titre, 
+			date_format(p.date_arrivee, '%d/%m/%Y') as date_arrivee, 
+			date_format(p.date_depart, '%d/%m/%Y') as date_depart, 
+			p.prix, 
+			s.titre, 
 			s.description, 
 			s.capacite, 
 			s.categories, 
@@ -78,40 +81,41 @@ require_once('inc/header.inc.php');
 			s.cp, 
 			s.ville, 
 			s.pays
-			FROM commande d, produit p, salle p
+			FROM commande c, produit p, salle s
 			WHERE c.id_produit = p.id_produit
 			AND p.id_salle = s.id_salle
 			AND c.id_commande = $id_commande"
 			);
 
-			// date_format(date_arrivee, '%d/%m/%Y') as date_d_arrivee 
 
-			$date_d_arrivee = date_format(date_arrivee, '%d/%m/%Y');
-			$date_depart = date_format(date_depart, '%d/%m/%Y');
-			
 			$details = $resultat -> fetchAll(PDO::FETCH_ASSOC);
+			
+			// debug($details);
+
 			foreach($details as $indice => $valeur){
 				
-				echo '<hr/><img src="photo/' . $valeur['photo'] . '" width="30"/>';
+				echo '<img src="photo/' . $valeur['photo'] . '" width="150"/>';
 				echo '<p>
-				Produit : ' . $valeur['titre'] . '<br/>
-				Description : ' . $valeur['description'] . '<br/>
+				Nom : ' . $valeur['titre'] . '<br/>
 				Capacité : ' . $valeur['capacite'] . '<br/>
 				Catégorie : ' . $valeur['categories'] . '<br/>
-				Adresse : <br/>' . $valeur['adresse'] . '<br/>' . $valeur['cp'] . '<br/>' . $valeur['ville'] . '<br/>' . $valeur['pays'] . '<br/>
+				Adresse : ' . $valeur['adresse'] . ',<br/>' . $valeur['cp'] . ', ' . $valeur['ville'] . ', ' . $valeur['pays'] . '<br/>
 				<hr/>
-				Commande du : ' . $valeur['date_commande'] . '<br/>
-				Date d\'arrivée : ' . $date_d_arrivee . '<br/>
-				Date de départ : ' . $date_depart . '<br/>
-				Prix : ' . $valeur['prix'] . '€ttc<br/>
+				Tarif de location : ' . $valeur['prix'] . '€ttc<br/>
+				<hr/>
+				Date d\'arrivée : ' . $valeur['date_arrivee'] . '<br/>
+				Date de départ : ' . $valeur['date_depart'] . '<br/>
 				</p>';  
 			}
 			?>
+
 		<?php endfor; ?>
+
 	<!-- Sinon, je propose un lien vers la boutique : -->
 	<?php else : ?>
 	<p>Vous n'avez pas encore passé de commande !<br/>Venez visiter <a href="boutique.php"><u>notre boutique</u></a></p>
 	<?php endif; ?>
+
 </div>
 
 <?php
