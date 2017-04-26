@@ -27,7 +27,7 @@ $note = $notes[0]['note'];
 // debug($note);
 
 // Traitement d'ajout du produit dans la table commande :
-if($_POST){
+if(isset($_POST['reservation'])){
     if(userConnecte()){
     // debug($_POST);
     // debug($_SESSION);
@@ -35,6 +35,7 @@ if($_POST){
     $requete -> bindParam(':membre', $_SESSION['membre']['id_membre'], PDO::PARAM_INT);
     $requete -> bindParam(':id_produit', $_POST['id_produit'], PDO::PARAM_INT);
     $requete -> execute();
+    header('location:profil.php');
     }
     else{
         $msg .= '<p class="navbar-text">Merci de vous connecter pour pouvoir commander !</p>';;
@@ -76,7 +77,7 @@ require_once('inc/header.inc.php');
     <div class="col-md-4">
         <form action="" method="POST">
             <input type="hidden" value="<?= $id_produit ?>" name="id_produit"/>
-            <input type="submit" class="btn btn-default btn-success" value="Réserver">
+            <input type="submit" name="reservation" class="btn btn-default btn-success" value="Réserver">
         </form>
     </div>
 </div>

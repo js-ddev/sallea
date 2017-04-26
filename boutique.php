@@ -6,12 +6,12 @@ $categories = $pdo -> query("select distinct categories from salle order by cate
 $capacite = $pdo -> query("select distinct capacite from salle order by capacite");
 $prix = $pdo -> query("select distinct prix from produit order by prix");
 
+// debug($_GET);
 
-
-// requête générique : 
+// requête générique :
 $req = "
-select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville 
-from salle s, produit p 
+select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville
+from salle s, produit p
 where s.id_salle = p.id_salle
 ";
 
@@ -22,13 +22,13 @@ where s.id_salle = p.id_salle
 // Fonctionnement pour générer une requête qui va récupérer toutes les données dans l'url
 foreach($_GET as $indice => $valeur){
 	if($valeur != ''){
-		$req .= "AND $indice = '$valeur' "; 
+		$req .= "AND $indice = '$valeur' ";
 	}
 }
 
 $resultat = $pdo -> prepare($req);
 
-// on génère les bindValue ! 
+// on génère les bindValue !
 
 /*foreach($_GET as $indice => $valeur){
 	if($valeur != ''){
@@ -42,7 +42,7 @@ $resultat = $pdo -> prepare($req);
 }*/
 
 
-//$resultat = $pdo -> query($req); 
+//$resultat = $pdo -> query($req);
 
 
 
@@ -58,7 +58,7 @@ if(isset($_GET['prix'])){
 	$resultat = $pdo -> prepare (
 		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle and prix = :prix");
 	$resultat -> bindValue(':prix', $_GET['prix'], PDO::PARAM_STR);
-	
+
 }
 
 if(isset($_GET['capacite'])){
@@ -126,7 +126,11 @@ require('inc/header.inc.php');
 
 ?>
 
-<h1 style="text-align: center"> Boutique </h1>
+<h1 style="text-align: center"> Nos salles
+<?php if(isset($_GET['ville'])) : ?>
+à <?= $_GET['ville'] ?>
+<?php endif; ?>
+</h1>
 <div class="container"> <!-- DEBUT BLOC CONTENER GLOBAL -->
 
 
@@ -190,11 +194,11 @@ require('inc/header.inc.php');
 
 
 				<label class="form-group">Période</label><br/>
-				
+
 				<span class="glyphicon glyphicon-calendar"></span> Date d'arrivée<br/><br/>
 				</span>
 				<input type="date" name="date_arrivee" class="form-control"><br/><br/>
-				
+
 				<span name="depart" class="glyphicon glyphicon-calendar"></span> Date de départ<br/><br/>
 				</span>
 				<input type="date" name="date_depart" class="form-control"><br/><br/>
@@ -204,6 +208,10 @@ require('inc/header.inc.php');
 
   				<input type="submit" class="btn btn-success" value="Valider">
 
+			</form>
+			<br>
+			<form class="" action="boutique.php">
+				<input type="submit" class="btn btn-warning" value="Effacer">
 			</form>
 
 		</div>  <!-- FIN BLOC CONTENER NAV GAUCHE -->
@@ -248,3 +256,7 @@ require('inc/header.inc.php');
 		<li><a href="#">Next</a></li>
 	</ul>
 </nav>
+
+<?php
+require_once('inc/footer.inc.php');
+?>

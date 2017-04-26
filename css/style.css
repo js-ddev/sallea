@@ -8,7 +8,14 @@ a{ text-decoration: none; color: #000; }
 
 .conteneur{ margin: 0 auto; max-width: 1170px;}
 
-footer{ background: #000000; color: white; text-align: center; padding: 7px 0;clear: both;}
+footer{
+    background: #000000;
+    color: white;
+    text-align: center;
+    padding: 7px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;}
 
 h1 {
     font-size: 30px;
