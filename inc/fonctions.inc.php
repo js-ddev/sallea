@@ -14,7 +14,6 @@ function debug($arg){
 
 // Fonction pour savoir si l'utilisateur est connecté :
 function userConnecte(){
-    // if(isset($_SESSION['membre']) && !empty($_SESSION['membre']['id_membre'])){
     if(isset($_SESSION['membre'])){
         return TRUE;
     }

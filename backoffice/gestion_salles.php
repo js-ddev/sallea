@@ -1,3 +1,15 @@
+<?php
+
+    require('../inc/init.inc.php');
+
+    // redirection si USER n'est pas admin
+
+    if(!userAdmin()){
+        header('location:' . RACINE_SITE . 'profil.php');
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,7 +55,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+
                 <a class="navbar-brand" href="../boutique.php">Backoffice SalleA</a>
+
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -70,6 +84,7 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
+
                         <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Acceuil</a>
                     </li>
                     <li>
@@ -139,164 +154,313 @@
                 <div class="row">
 
                     <div class="col-lg-12">
+
                         <h2>Tableau des salles</h2>
+
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>id_salle</th>
-                                        <th>Titre</th>
-                                        <th>Description</th>
-                                        <th>Photo</th>
-                                        <th>Pays</th>
-                                        <th>Ville</th>
-                                        <th>Adresse</th>
-                                        <th>CP</th>
-                                        <th>Capacité</th>
-                                        <th>Catégorie</th>
-                                        <th colspan="3">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Salle truc</td>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </td>
-                                        <td><img src="../photo/salle1.jpg" width="50"></td>
-                                        <td>France</td>
-                                        <td>Paris</td>
-                                        <td>5 rue Victor Hugo</td>
-                                        <td>75006</td>
-                                        <td>30</td>
-                                        <td>Salle</td>
-                                        <td><span class="glyphicon glyphicon-search"></span></td>
-                                        <td><span class="glyphicon glyphicon-edit"></span></td>
-                                        <td><span class="glyphicon glyphicon-trash"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Salle truc</td>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </td>
-                                        <td><img src="../photo/salle1.jpg" width="50"></td>
-                                        <td>France</td>
-                                        <td>Paris</td>
-                                        <td>5 rue Victor Hugo</td>
-                                        <td>75006</td>
-                                        <td>30</td>
-                                        <td>Salle</td>
-                                        <td><span class="glyphicon glyphicon-search"></span></td>
-                                        <td><span class="glyphicon glyphicon-edit"></span></td>
-                                        <td><span class="glyphicon glyphicon-trash"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Salle truc</td>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </td>
-                                        <td><img src="../photo/salle1.jpg" width="50"></td>
-                                        <td>France</td>
-                                        <td>Paris</td>
-                                        <td>5 rue Victor Hugo</td>
-                                        <td>75006</td>
-                                        <td>30</td>
-                                        <td>Salle</td>
-                                        <td><span class="glyphicon glyphicon-search"></span></td>
-                                        <td><span class="glyphicon glyphicon-edit"></span></td>
-                                        <td><span class="glyphicon glyphicon-trash"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Salle truc</td>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </td>
-                                        <td><img src="../photo/salle1.jpg" width="50"></td>
-                                        <td>France</td>
-                                        <td>Paris</td>
-                                        <td>5 rue Victor Hugo</td>
-                                        <td>75006</td>
-                                        <td>30</td>
-                                        <td>Salle</td>
-                                        <td><span class="glyphicon glyphicon-search"></span></td>
-                                        <td><span class="glyphicon glyphicon-edit"></span></td>
-                                        <td><span class="glyphicon glyphicon-trash"></span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+
+                            <?php
+                                // backoffice /
+                                    // -> gestion_boutique.php
+
+                            // Traitement pour récupérer toutes les infos des produits
+
+                            //----------------------------------------------------------
+                            // 4 : Affichage d'une table SQL sous forme de tableau HTML
+                            //----------------------------------------------------------
+
+                            $resultat = $pdo -> query("SELECT * FROM salle");
+
+
+                            // $contenu.= 'Nombre de résultat : ' . $resultat -> rowCount() . '<br/><br/>';
+
+                            $contenu.= '<table class="table table-bordered table-hover table-striped">';
+
+                                $contenu.= '<thead><tr>';
+
+                                    for($i = 0; $i < $resultat -> columnCount (); $i ++){
+                                        // getColumnMeta récupère toutes les infos de la colonne
+                                        $meta = $resultat -> getColumnMeta($i);
+                                        // ucfirst(.....) permet de mettre la 1ère lettre en majuscule
+                                        $contenu.= '<th>' . ucfirst($meta['name']) . '</th>';
+                                    }
+                                $contenu .= '<th colspan="3">Action</th>';
+                                $contenu.= '</thead></tr>';
+
+
+                                while($infos = $resultat -> fetch(PDO::FETCH_ASSOC)){
+                                    $contenu.= '<tbody><tr>';
+
+                                    foreach($infos as $indice => $valeur){
+
+                                        if($indice == 'photo'){
+                                            // <img src= affiche la photo si non on afficherait juste le nom du fichier photo
+                                            $contenu .= '<td><img src="' . RACINE_SITE . 'photo/' . $valeur . '" height="80" /></td>';
+                                        }
+
+                                        else{
+                                            $contenu.= '<td>' . $valeur . '</td>';
+                                        }
+                                    }
+                                    // Boutons modifier et supprimer
+                                    $contenu .= '<td><a href="gestion_salles.php?id=' . $infos['id_salle'] . '"><span class="glyphicon glyphicon-search"></span></a></td>'; // Voir la fiche salle
+                                    $contenu .= '<td><a href="gestion_salles.php?id=' . $infos['id_salle'] . '"><span class="glyphicon glyphicon-edit"></span></a></td>'; // Editer la fiche salle pour la modifier
+
+                                    // ////////   A FAIRE  cf page supprimer de projet site_yakine ////////
+                                    $contenu .= '<td><a href="supprimer_produit.php?id=' . $infos['id_salle'] . '"><span class="glyphicon glyphicon-trash"></span></a></td>'; // Supprimer la fiche salle
+                                    $contenu .= '</tr></tbody>';
+
+                                }
+
+                            $contenu.= '</table>';
+
+                            ?>
+
+
+                            <?= $contenu ?>
+
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- FIN TABLEAU DES SALLES -->
 
                 <!-- DEBUT FORMULAIRE -->
 
-                <div class="row">
 
-                    <div class="col-lg-6"> <!-- formulaire coté gauche -->
 
-                        <form role="form">
+
+<?php
+
+// Traitement pour récupérer les infos du produit à modifier
+
+if(isset($_GET['id']) && !empty($_GET['id']) && is_numeric($_GET['id'])) { // Si j'ai un id, non vide et bien une valeur numérique... on récupère les infos du produit dans la BDD (SELECT)
+    $resultat = $pdo -> prepare("SELECT * FROM salle WHERE id_salle = :id");
+    $resultat -> bindValue(':id', $_GET['id'], PDO::PARAM_INT);
+    $resultat -> execute();
+
+    // Vérifier si un résultat est retourné
+    if($resultat -> rowCount() > 0){
+        $produit_actuel = $resultat -> fetch(PDO::FETCH_ASSOC);
+      /*  debug($produit_actuel);*/
+    }
+}
+
+
+// revient à faire :
+    // if(isset($produit_actuel)){
+    //  $reference = $produit_actuel['reference']
+    // }
+    // else{
+    //  $reference = '';
+    // }
+$id_salle = (isset($produit_actuel)) ? $produit_actuel['id_salle'] : '';
+$titre = (isset($produit_actuel)) ? $produit_actuel['titre'] : '';
+$description = (isset($produit_actuel)) ? $produit_actuel['description'] : '';
+$photo = (isset($produit_actuel)) ? $produit_actuel['photo'] : '';
+$pays = (isset($produit_actuel)) ? $produit_actuel['pays'] : '';
+$ville = (isset($produit_actuel)) ? $produit_actuel['ville'] : '';
+$adresse = (isset($produit_actuel)) ? $produit_actuel['adresse'] : '';
+$cp = (isset($produit_actuel)) ? $produit_actuel['cp'] : '';
+$capacite = (isset($produit_actuel)) ? $produit_actuel['capacite'] : '';
+$categorie = (isset($produit_actuel)) ? $produit_actuel['categories'] : '';
+$action = (isset($produit_actuel)) ? 'Modifier' : 'Ajouter';
+
+
+
+
+
+// Traitement pour enregistrer ou modifier un produit
+
+if($_POST) {
+
+    debug($_POST);
+    debug($nom_photo);
+
+    if(isset($_POST['photo'])){
+        $nom_photo = $_POST['photo'];
+    }
+        // Si je suis dans le cadre d'une modification de produit, alors je prends le nom de sa photo et je stocke dans $nom_photo qui sera enregistré en BDD.
+
+        // ... Mais si une nouvelle photo est postée (je souhaite modifier la photo), alors on entre dans la condition ci-dessous, et $nom_photo prendra la valeur de la nouvelle photo.
+
+
+
+    if(!empty($_FILES['photo']['name'])){ // Si une image nous a été transmise
+        $nom_photo = $_POST['reference'] . '_' . $_FILES['photo']['name'];
+        // On crée un nouveau nom de photo pour éviter les doublons sur notre serveur et dans la BDD.
+
+        $chemin_photo = RACINE_SERVEUR . RACINE_SITE . 'photo/' . $nom_photo;
+        // $chemin_photo est l'emplacement définitif de la photo depyuis la racine du serveur et jusqu'à son nom
+
+        ///  c://xampp/htdocs/php/site/
+        ///  c://xampp/htdocs/  représente localhost (racine du serveur)
+        ///  cf init.inc.php   
+        ///  define('RACINE_SERVEUR', $_SERVER['DOCUMENT_ROOT']);
+
+        // Vérification de l'extension du fichier
+        // On crée un array avec les extensions :  $ext = array('image/png', 'image/jpeg', 'image/gif');
+        $ext = array('image/png', 'image/jpeg', 'image/gif');
+        if(!in_array($_FILES['photo']['type'], $ext)){
+            $msg .= '<div class="erreur"> Veuillez choisir une photo au format : JPEG, JPG, PNG, ou GIF</div>';
+                // ['type'] est trouvé grâce au debug($_FILES); qui affiche les indices des array dans le navigateur
+        }
+
+        // Vérification de la taille du fichier
+        if ($_FILES['photo']['size'] > 1000000){
+            $msg .= '<div class="erreur"> Veuillez choisir une photo de 2 Mo maximum</div>';
+                // ['size'] est trouvé grâce au debug($_FILES); qui affiche les indices des array dans le navigateur
+
+        }
+
+        if(empty($msg)){ // Tout est OK pas d'erreur dans le fichier image
+            copy($_FILES['photo']['tmp_name'], $chemin_photo);  // copie est une fonction qui nous permet de déplacer un fichier. 1er arg : l'emplacement de l'original, et 2ème l'emplacement de la copie (emplacement définitif)
+
+        }
+
+    }  // Fin du IF empty($_FILES etxc...)
+
+
+    // Traitement pour insérer en BDD
+
+    // Au préalable nous aurions vérifier l'intégrité des données (type de caractères, nbre de caractères, taille, is_numeric, empty etc...)
+
+    // Insertion des infos dans la BDD
+
+    if(isset($_GET['id'])){ // Si je suis dans le cadre d'une modification
+    $resultat = $pdo -> prepare("REPLACE INTO salle(id_salle, titre, description, photo, pays, ville, adresse, cp, capacite, categories) VALUES (:id_salle, :titre, :description, :photo, :pays, :ville, :adresse, :cp, :capacite, :categories)");
+
+        $resultat -> bindParam(':id_salle', $_POST['id_salle'], PDO::PARAM_INT);
+    }
+    else{  // ou alors je suis dans le cas d'un ajout
+    $resultat = $pdo -> prepare("INSERT INTO salle(id_salle, titre, description, photo, pays, ville, adresse, cp, capacite, categories) VALUES (:id_salle, :titre, :description, :photo, :pays, :ville, :adresse, :cp, :capacite, :categories)");
+    }
+
+
+    // STR
+    $resultat -> bindParam(':titre', $_POST['titre'], PDO::PARAM_STR);
+    $resultat -> bindParam(':description', $_POST['description'], PDO::PARAM_STR);
+    $resultat -> bindParam(':pays', $_POST['pays'], PDO::PARAM_STR);
+    $resultat -> bindParam(':ville', $_POST['ville'], PDO::PARAM_STR);
+    $resultat -> bindParam(':adresse', $_POST['adresse'], PDO::PARAM_STR);
+    $resultat -> bindParam(':categories', $_POST['categories'], PDO::PARAM_STR);
+
+    // INT
+    $resultat -> bindParam(':id_salle', $_POST['id_salle'], PDO::PARAM_INT);
+    $resultat -> bindParam(':cp', $_POST['cp'], PDO::PARAM_INT);
+    $resultat -> bindParam(':capacite', $_POST['capacite'], PDO::PARAM_INT);
+
+    // Attention : ':photo'  ============>   $nom_photo
+    $resultat -> bindParam(':photo', $nom_photo, PDO::PARAM_STR);
+
+
+    if($resultat -> execute()){
+        $msg .= '<div class="erreur">Enregistrement effectué</div>';
+/*    header('location:gestion_boutique.php');
+*/    }
+    else{
+        $msg .= '<div class="erreur">Erreur dans la requête !!</div>';
+    }
+
+} // Fin du if($_POST)
+
+
+?>
+
+<h1><?= $action ?> un produit</h1>
+
+<?= $msg ?>
+
+
+
+
+
+
+
+
+
+
+
+                <form role="form" method="POST">
+
+                    <div class="row">
+
+                        <div class="col-lg-6"> <!-- formulaire coté gauche -->
+
+                            <input type="hidden" name="id_produit" value="<?= $id_produit ?>" />
 
                             <div class="form-group">
                                 <label>Titre</label>
-                                <input class="form-control" placeholder="Titre de la salle">
+                                <input class="form-control" placeholder="Titre de la salle" name="titre" value="<?= $titre ?>">
                             </div>
 
                             <div class="form-group">
                                 <label>Description</label>
-                                <textarea class="form-control" rows="3" placeholder="Description de la salle"></textarea>
+                                <textarea class="form-control" rows="3" placeholder="Description de la salle" name="description"><?= $description ?></textarea>
+
                             </div>
 
                             <div class="form-group">
                                 <label>Photo</label>
-                                <input type="file">
+
+                                <input type="file" name="photo" value="<?= $photo ?>">
+
                             </div>
 
                             <div class="form-group">
                                 <label>Capacité</label>
-                                <input class="form-control" placeholder="Capacité de la salle">
+                                <input class="form-control" placeholder="Capacité de la salle" name="capacite" value="<?= $capacite ?>">
                             </div>
-
-                            <!-- Faire une boucle pour récupérer les catégories -->
 
                             <div class="form-group">
-                                <label>Catégorie</label>
-                                <select class="form-control">
-                                    <option>Réunion</option>
-                                    <option>Bureau</option>
-                                    <option>Formation</option>
-                                </select>
+                            <label>Catégorie</label>
+                            <select class="form-control" name="categories" value="<?= $categories ?>">
+                                <option  <?= ($categorie == 'réunion') ? 'selected' : '' ?> value="réunion">Réunion</option>
+                                <option  <?= ($categorie == 'bureau') ? 'selected' : '' ?> value="bureau">Bureau</option>
+                                <option  <?= ($categorie == 'formation') ? 'selected' : '' ?> value="formation">Formation</option>
+                            </select>
                             </div>
 
-                    </div>
-
-                    <div class="col-lg-6"> <!-- formulaire coté droit -->
+                        </div>
+                        
+                        <div class="col-lg-6"> <!-- formulaire coté droit -->
 
                             <div class="form-group">
                                 <label>Pays</label>
-                                <input class="form-control" placeholder="Pays dans laquelle se trouve la salle">
+                                <input class="form-control" placeholder="Pays dans laquelle se trouve la salle" name="pays" value="<?= $pays ?>">
+
                             </div>
 
                             <div class="form-group">
                                 <label>Ville</label>
-                                <input class="form-control" placeholder="Ville dans laquelle se trouve la salle">
+                                <input class="form-control" placeholder="Ville dans laquelle se trouve la salle" name="ville" value="<?= $ville ?>">
+
                             </div>
 
                             <div class="form-group">
                                 <label>Adresse</label>
-                                <textarea class="form-control" rows="3" placeholder="Adresse de la salle"></textarea>
+
+                                <textarea class="form-control" rows="3" placeholder="Adresse de la salle" name="adresse"><?= $adresse ?></textarea>
+
                             </div>
 
 
                             <div class="form-group">
                                 <label>Code Postal</label>
-                                <input class="form-control" placeholder="Code Postal de la ville dans laquelle se trouve la salle">
+
+                                <input class="form-control" placeholder="Code Postal de la ville dans laquelle se trouve la salle" name="cp" value="<?= $cp ?>">
                             </div>
 
-                            <button type="submit" class="btn btn-default">Submit Button</button>
+                            <button type="submit" class="btn btn-default">Enregistrer</button>
 
-                        </form>
+                            <!-- <a style="display: inline-block; padding: 10px; border: 2px solid red; border-radius: 3px; text-align: center; margin: 20px 0; color: red; font-weight: bold;" href="formulaire_produit.php">Ajouter un produit</a> -->
+
+                        </div>
 
                     </div>
 
-                </div>
+                </form>
+
 
                 <!-- FIN FORMULAIRE -->
 

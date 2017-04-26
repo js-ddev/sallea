@@ -1,7 +1,5 @@
 <?php
-
 require('inc/init.inc.php');
-
 // requete colonne gauche :
 $result = $pdo -> query("select distinct ville from salle order by ville");
 $categories = $pdo -> query("select distinct categories from salle order by categories");
@@ -31,6 +29,7 @@ foreach($_GET as $indice => $valeur){
 $resultat = $pdo -> prepare($req);
 
 // on génère les bindValue ! 
+
 /*foreach($_GET as $indice => $valeur){
 	if($valeur != ''){
 		$resultat -> bindValue("':" . $indice . "'", $valeur, PDO::PARAM_STR);
@@ -41,7 +40,6 @@ $resultat = $pdo -> prepare($req);
 		echo '<br/>';
 	}
 }*/
-
 
 
 //$resultat = $pdo -> query($req); 
@@ -69,6 +67,7 @@ if(isset($_GET['capacite'])){
 		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle and capacite = :capacite");
 	$resultat -> bindValue(':capacite', $_GET['capacite'], PDO::PARAM_STR);
 }
+
 
 if(isset($_GET['date_arrivee'])){
 
@@ -109,7 +108,6 @@ else{
 
 
 
-
 //debug($_GET);
 //debug($resultats);
 // END OF SELECTION
@@ -133,14 +131,14 @@ require('inc/header.inc.php');
 
 
 		<div class="col-lg-2">  <!-- DEBUT BLOC CONTENER NAV GAUCHE -->
-			
+
 			<form method="GET">
 
 				<label class="form-group">Catégorie</label><br/>
 				<select name="categories" class="form-control">
 					<option value=''></option>
 				<?php while ($categorie = $categories -> fetch(PDO::FETCH_ASSOC)) : ?>
-					
+
 					<?php  foreach($categorie as $key => $value) : ?>
 
 					<option value="<?= $value ?>"><?= $value ?></option>
