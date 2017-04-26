@@ -5,8 +5,18 @@ body{ font-family : verdana; font-size: 12px; }
 a{ text-decoration: none; color: #000; }
 .conteneur{ margin: 0 auto; max-width: 1170px;}
 
+h1 {
+    font-size: 30px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
 h2 {
     font-size: 20px;
+}
+
+.col-md-5 > .glyphicon-star {
+    font-size: large;
 }
 
 /* Page produit : */

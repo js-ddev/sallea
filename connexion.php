@@ -2,7 +2,7 @@
 
 require_once('inc/init.inc.php');
 
-$msg .= '<div class="erreur">Erreur de mot de passe !</div>';
+// $msg .= '<div class="erreur">Erreur de mot de passe !</div>';
 
 // Traitement pour la déconnexion
 if(isset($_GET['action']) && $_GET['action'] == 'deconnexion'){
@@ -44,20 +44,19 @@ if($_POST){
 			header('location:profil.php');
 		}
 		else{
-			$msg .= '<div class="erreur">Erreur de mot de passe !</div>';
+			// $msg .= '<div class="erreur">Erreur de mot de passe !</div>';
 		}
 	}
 	else{
-		$msg .= '<div class="erreur">Erreur de pseudo !</div>';
+		// $msg .= '<div class="erreur">Erreur de pseudo !</div>';
 	}
 }
 
 
 $page = 'Connexion';
-require_once('inc/header.inc-modal.php');
+require_once('inc/header.inc.php');
 ?>
 <h1>Connexion</h1>
-<?= $msg ?>
 <form action="" method="post">
 	<label>Pseudo : </label>
 	<input type="text" name="pseudo" />

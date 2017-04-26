@@ -20,15 +20,28 @@ else{
     header('location:boutique.php');
 }
 
-// Traitement d'ajour du produit dans la table commande :
+// Traitement d'affichage de la moyenne des notes de la salle :
+$resultat2 = $pdo -> query("SELECT id_salle, ROUND(AVG(note)) AS 'note' FROM avis WHERE id_salle = $produit[id_salle]");
+$notes = $resultat2 -> fetchAll(PDO::FETCH_ASSOC);
+$note = $notes[0]['note'];
+// debug($note);
+
+// Traitement d'ajout du produit dans la table commande :
 if($_POST){
+    if(userConnecte()){
     // debug($_POST);
     // debug($_SESSION);
     $requete = $pdo -> prepare("INSERT INTO commande(id_membre,id_produit,date_enregistrement) VALUES (:membre,:id_produit,NOW())");
     $requete -> bindParam(':membre', $_SESSION['membre']['id_membre'], PDO::PARAM_INT);
     $requete -> bindParam(':id_produit', $_POST['id_produit'], PDO::PARAM_INT);
     $requete -> execute();
+    }
+    else{
+        $msg .= '<p class="navbar-text">Merci de vous connecter pour pouvoir commander !</p>';;
+    }
+
 }
+
 
 // TRAITEMENT pour afficher les produits suggérés :
 // Requete pour récupérer des produits de la même catégorie (sauf celui qu'on visite)
@@ -49,15 +62,17 @@ $suggestion = $resultatProduit -> fetchAll(PDO::FETCH_ASSOC);
 // }
 
 
-$page = 'Produit';
-require_once('inc/header.inc-modal.php');
+$page = 'Produit '.$titre;
+require_once('inc/header.inc.php');
 ?>
 
 <div class="row">
     <div class="col-md-3"><h1><?= $titre ?></h1></div>
-    <div id="produit-etoile" class="note col-md-5">
-        <img src="<?= RACINE_SITE ?>img/star-2.png" alt="etoile">
-    </div>
+          <div class="col-md-5" title="Cette salle a une note moyenne de <?= $note?>/5">
+              <?php for ($i=0; $i < $note ; $i++) : ?>
+                  <span class="glyphicon glyphicon-star"></span>
+              <?php endfor; ?>
+         </div>
     <div class="col-md-4">
         <form action="" method="POST">
             <input type="hidden" value="<?= $id_produit ?>" name="id_produit"/>
