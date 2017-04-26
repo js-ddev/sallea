@@ -4,7 +4,6 @@ require('inc/init.inc.php');
 
 // requete colonne gauche :
 $result = $pdo -> query("select distinct ville from salle order by ville");
-$categories = $pdo -> query("select distinct categories from salle order by categories");
 $capacite = $pdo -> query("select distinct capacite from salle order by capacite");
 $prix = $pdo -> query("select distinct prix from produit order by prix");
 
@@ -12,110 +11,93 @@ $prix = $pdo -> query("select distinct prix from produit order by prix");
 
 // Selection 
 
-
-// requête générique : 
-$req = "
-select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville 
-from salle s, produit p 
-where s.id_salle = p.id_salle
-";
-
-
-
-
-
-// Fonctionnement pour générer une requête qui va récupérer toutes les données dans l'url
-foreach($_GET as $indice => $valeur){
-	if($valeur != ''){
-		$req .= "AND $indice = '$valeur' "; 
-	}
-}
-
-$resultat = $pdo -> prepare($req);
-
-// on génère les bindValue ! 
-/*foreach($_GET as $indice => $valeur){
-	if($valeur != ''){
-		$resultat -> bindValue("':" . $indice . "'", $valeur, PDO::PARAM_STR);
-		echo '<br/>';
-		echo "':" . $indice . "'" . '  ->   ' . $valeur . '<br/>';
-		echo '<br/>';
-		echo '$resultat' . " -> bindValue(':$indice', $valeur, PDO::PARAM_STR)";
-		echo '<br/>';
-	}
-}*/
-
-
-
-//$resultat = $pdo -> query($req); 
-
-
-
-/*if(isset($_GET['ville'])) {
+if(isset($_GET['ville'])) {
 
 	$resultat = $pdo -> prepare (
 		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle and ville = :ville");
 	$resultat -> bindValue(':ville', $_GET['ville'], PDO::PARAM_STR);
-}
+	$resultat -> execute();
+
+	if($resultat -> rowCount() > 0) { // si ma requete m'a trouvé au moins un produit...
+		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
+		
+	}
 
 if(isset($_GET['prix'])){
 
 	$resultat = $pdo -> prepare (
 		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle and prix = :prix");
 	$resultat -> bindValue(':prix', $_GET['prix'], PDO::PARAM_STR);
-	
-}
+	$resultat -> execute();
+
+	if($resultat -> rowCount() > 0) { // si ma requete m'a trouvé au moins un produit...
+		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
+		
+	}
 
 if(isset($_GET['capacite'])){
 
 	$resultat = $pdo -> prepare (
 		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle and capacite = :capacite");
 	$resultat -> bindValue(':capacite', $_GET['capacite'], PDO::PARAM_STR);
-}
+	$resultat -> execute();
+
+	if($resultat -> rowCount() > 0) { // si ma requete m'a trouvé au moins un produit...
+		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
+
 
 if(isset($_GET['date_arrivee'])){
 
 	$resultat = $pdo -> prepare (
 		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle and date_arrivee = :date_arrivee");
 	$resultat -> bindValue(':date_arrivee', $_GET['date_arrivee'], PDO::PARAM_STR);
-}
+	$resultat -> execute();
+
+	if($resultat -> rowCount() > 0) { // si ma requete m'a trouvé au moins un produit...
+		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
+
 
 if(isset($_GET['date_depart'])){
 
 	$resultat = $pdo -> prepare (
 		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle and date_depart = :date_depart");
 	$resultat -> bindValue(':date_depart', $_GET['date_depart'], PDO::PARAM_STR);
-}
+	$resultat -> execute();
 
-*/
-if($resultat -> execute()){
 	if($resultat -> rowCount() > 0) { // si ma requete m'a trouvé au moins un produit...
 		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
+		
 	}
-	else{
+}
 
-		// pas de résultat !
+	else{
+// aucun produit trouvé!
+	
 		$resultat = $pdo -> query("select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle");
 		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
 
-		echo "Il n'y a pas de résultat";
-
-
-
+		
 	}
-
-}
-else{
-	echo "Il y a une erreur dans la requete";
 }
 
 
 
 
 
-//debug($_GET);
-//debug($resultats);
+}//fin du if isset ($_GET)
+else { 
+		$resultat = $pdo -> query("select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle");
+		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
+		// on est dans le else, il n'y a pas de parametre categorie dans l'URL... on affiche donc tous les produits	
+		
+}
+
+
+debug($_GET);
+
+
 // END OF SELECTION
+
 
 
 
@@ -138,24 +120,16 @@ require('inc/header.inc-modal.php');
 		<div class="col-lg-2">  <!-- DEBUT BLOC CONTENER NAV GAUCHE -->
 			
 			<form method="GET">
-				
 				<label class="form-group">Catégorie</label><br/>
-				<select name="categories" class="form-control">
-					<option value=''></option>
-				<?php while ($categorie = $categories -> fetch(PDO::FETCH_ASSOC)) : ?>
-					
-					<?php  foreach($categorie as $key => $value) : ?>
+				<select name="categorie" class="form-control">
 
-					<option value="<?= $value ?>"><?= $value ?></option>
-					<?php endforeach; ?>
-
-				<?php endwhile; ?>
-
+					<option value="reunion">Réunion</option>
+					<option value="bureau">Bureau</option>
+					<option value="formation">Formation</option>
 				</select><br/><br/>
 
 				<label class="form-group">Ville</label><br/>
 				<select name="ville" class="form-control">
-				<option value=''></option>
 				<?php while ($ville = $result -> fetch(PDO::FETCH_ASSOC)) : ?>
 
 					<?php  foreach($ville as $key => $value) : ?>
@@ -168,7 +142,6 @@ require('inc/header.inc-modal.php');
 
 				<label class="form-group">Capacité (#)</label><br/>
 				<select name="capacite" class="form-control">
-				<option value=''></option>
 				<?php while ($capa = $capacite -> fetch(PDO::FETCH_ASSOC)) : ?>
 
 					<?php  foreach($capa as $key => $value) : ?>
@@ -182,7 +155,6 @@ require('inc/header.inc-modal.php');
 
 				<label class="form-group">Prix (€)</label><br/>
 				<select name="prix" class="form-control">
-				<option value=''></option>
 				<?php while ($price = $prix -> fetch(PDO::FETCH_ASSOC)) : ?>
 					
 					<?php  foreach($price as $key => $value) : ?>
