@@ -1,3 +1,18 @@
+<?php
+require('../inc/init.inc.php');
+
+if(!userAdmin()){
+    header('location:../profil.php');
+}
+
+// Traitement pour récupérer tous les avis :
+$resultat = $pdo -> query(
+"SELECT a.id_avis, a.id_membre, m.pseudo, a.id_salle, s.titre, a.commentaire, a.note, a.date_enregistrement FROM avis a, membre m, salle s WHERE a.id_membre = m.id_membre AND a.id_salle = s.id_salle");
+
+$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +24,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin - Bootstrap Admin Template</title>
+    <title>Gestion des Avis</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -32,7 +47,7 @@
 <body>
 
     <div id="wrapper">
-
+        <!-- <?= debug($resultats); ?> -->
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -43,12 +58,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">SB Admin</a>
+                <a class="navbar-brand" href="index.html">Backoffice SalleA</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Bonjour Admin !<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
@@ -70,19 +85,19 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
-                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Acceuil</a>
                     </li>
                     <li>
-                        <a href="gestion_membres.html"><i class="fa fa-fw fa-table"></i>Gestion des membres</a>
+                        <a href="gestion_membres.php"><i class="fa fa-fw fa-table"></i>Gestion des membres</a>
                     </li>
                     <li>
-                        <a href="gestion_salles.html"><i class="fa fa-fw fa-table"></i>Gestion des salles</a>
+                        <a href="gestion_salles.php"><i class="fa fa-fw fa-table"></i>Gestion des salles</a>
                     </li>
                     <li>
-                        <a href="gestion_produits.html"><i class="fa fa-fw fa-table"></i>Gestion des produits</a>
+                        <a href="gestion_produits.php"><i class="fa fa-fw fa-table"></i>Gestion des produits</a>
                     </li>
                     <li>
-                        <a href="gestion_avis.html"><i class="fa fa-fw fa-star"></i>Gestion des avis</a>
+                        <a href="gestion_avis.php"><i class="fa fa-fw fa-star"></i>Gestion des avis</a>
                     </li>
                     <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Theme <i class="fa fa-fw fa-caret-down"></i></a>
@@ -109,6 +124,7 @@
             <!-- /.navbar-collapse -->
         </nav>
 
+
         <div id="page-wrapper">
 
             <div class="container-fluid">
@@ -117,8 +133,9 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Blank Page
-                            <small>Subheading</small>
+                            Gestion des avis
+                            <small>Consulter | Créer | Modifier | Supprimer</small>
+
                         </h1>
                         <ol class="breadcrumb">
                             <li>
@@ -132,14 +149,57 @@
                 </div>
                 <!-- /.row -->
 
+
+                <!-- DEBUT TABLEAU DES MEMBRES -->
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <h2>Tableau de tous les avis</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID avis</th>
+                                        <th>ID membre</th>
+                                        <th>ID salle</th>
+                                        <th>Commentaire</th>
+                                        <th>Note</th>
+                                        <th>Date enregistrement</th>
+                                        <th colspan="3">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php for ($i=0; $i < sizeof($resultats); $i++): ?>
+                                    <tr>
+                                        <td><?= $resultats[$i]['id_avis'] ?></td>
+                                        <td><?= $resultats[$i]['id_membre']  ?> - <?= $resultats[$i]['pseudo']  ?></td>
+                                        <td><?= $resultats[$i]['id_salle']  ?> - <?= $resultats[$i]['titre']  ?></td>
+                                        <td><?= $resultats[$i]['commentaire'] ?></td>
+                                        <td>
+                                            <?php for ($j=0; $j < $resultats[$i]['note'] ; $j++) : ?>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <?php endfor; ?>
+                                        </td>
+                                        <td><?= $resultats[$i]['date_enregistrement'] ?></td>
+                                        <td><a href="#"><span class="glyphicon glyphicon-search"></span></a></td>
+                                        <td><span class="glyphicon glyphicon-edit"></span></td>
+                                        <td><span class="glyphicon glyphicon-trash"></span></td>
+                                    </tr>
+                                <?php endfor; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FIN TABLEAU DES membres -->
+
             </div>
             <!-- /.container-fluid -->
 
         </div>
         <!-- /#page-wrapper -->
-
-    </div>
-    <!-- /#wrapper -->
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>

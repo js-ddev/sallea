@@ -23,7 +23,7 @@ else{
 }
 
 $page = 'Profil';
-require_once('inc/header.inc-modal.php');
+require_once('inc/header.inc.php');
 ?>
 <h1>Profil de <?= $pseudo ?> </h1>
 
@@ -67,20 +67,20 @@ require_once('inc/header.inc-modal.php');
 			$id_commande = $commande[$i]['id_commande'];
 			$resultat = $pdo -> query(
 
-      "SELECT 
-			c.date_enregistrement, 
-			p.id_produit, 
-			date_format(p.date_arrivee, '%d/%m/%Y') as date_arrivee, 
-			date_format(p.date_depart, '%d/%m/%Y') as date_depart, 
-			p.prix, 
-			s.titre, 
-			s.description, 
-			s.capacite, 
-			s.categories, 
-			s.photo, 
-			s.adresse, 
-			s.cp, 
-			s.ville, 
+      "SELECT
+			c.date_enregistrement,
+			p.id_produit,
+			date_format(p.date_arrivee, '%d/%m/%Y') as date_arrivee,
+			date_format(p.date_depart, '%d/%m/%Y') as date_depart,
+			p.prix,
+			s.titre,
+			s.description,
+			s.capacite,
+			s.categories,
+			s.photo,
+			s.adresse,
+			s.cp,
+			s.ville,
 			s.pays
 			FROM commande c, produit p, salle s
 			WHERE c.id_produit = p.id_produit
@@ -89,11 +89,11 @@ require_once('inc/header.inc-modal.php');
 			);
 
 			$details = $resultat -> fetchAll(PDO::FETCH_ASSOC);
-			
+
 			// debug($details);
 
 			foreach($details as $indice => $valeur){
-			
+
 				echo '<img src="photo/' . $valeur['photo'] . '" width="150"/>';
 				echo '<p>
 				Nom : ' . $valeur['titre'] . '<br/>
@@ -106,7 +106,7 @@ require_once('inc/header.inc-modal.php');
 
 				Date d\'arrivée : ' . $valeur['date_arrivee'] . '<br/>
 				Date de départ : ' . $valeur['date_depart'] . '<br/>
-				</p>';  
+				</p>';
 
 			}
 			?>

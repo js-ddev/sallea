@@ -10,9 +10,6 @@ $prix = $pdo -> query("select distinct prix from produit order by prix");
 
 
 
-// Selection 
-
-
 // requête générique : 
 $req = "
 select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville 
@@ -91,6 +88,7 @@ if(isset($_GET['date_depart'])){
 if($resultat -> execute()){
 	if($resultat -> rowCount() > 0) { // si ma requete m'a trouvé au moins un produit...
 		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
+
 	}
 	else{
 
@@ -99,7 +97,6 @@ if($resultat -> execute()){
 		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
 
 		echo "Il n'y a pas de résultat";
-
 
 
 	}
@@ -127,7 +124,7 @@ else{
 
 
 $page = 'Boutique';
-require('inc/header.inc-modal.php');
+require('inc/header.inc.php');
 
 ?>
 
@@ -138,7 +135,7 @@ require('inc/header.inc-modal.php');
 		<div class="col-lg-2">  <!-- DEBUT BLOC CONTENER NAV GAUCHE -->
 			
 			<form method="GET">
-				
+
 				<label class="form-group">Catégorie</label><br/>
 				<select name="categories" class="form-control">
 					<option value=''></option>
@@ -184,14 +181,14 @@ require('inc/header.inc-modal.php');
 				<select name="prix" class="form-control">
 				<option value=''></option>
 				<?php while ($price = $prix -> fetch(PDO::FETCH_ASSOC)) : ?>
-					
+
 					<?php  foreach($price as $key => $value) : ?>
 					<option value="<?= $value ?>"><?= $value ?> €</option>
 					<?php endforeach; ?>
 
 				<?php endwhile; ?>
 				</select><br/><br/>
-				
+
 
 
 				<label class="form-group">Période</label><br/>
@@ -203,14 +200,14 @@ require('inc/header.inc-modal.php');
 				<span name="depart" class="glyphicon glyphicon-calendar"></span> Date de départ<br/><br/>
 				</span>
 				<input type="date" name="date_depart" class="form-control"><br/><br/>
-				
+
 
 
 
   				<input type="submit" class="btn btn-success" value="Valider">
 
 			</form>
-			
+
 		</div>  <!-- FIN BLOC CONTENER NAV GAUCHE -->
 
 
@@ -253,6 +250,3 @@ require('inc/header.inc-modal.php');
 		<li><a href="#">Next</a></li>
 	</ul>
 </nav>
-			
-
-		
