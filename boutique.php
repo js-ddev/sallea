@@ -2,7 +2,6 @@
 
 require('inc/init.inc.php');
 
-<<<<<<< HEAD
 $resultat = $pdo -> query(
 "select p.id_produit, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville
 =======
