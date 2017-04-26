@@ -69,30 +69,37 @@ require_once('inc/header.inc.php');
 
 <h1>Inscription</h1>
 <?= $msg ?>
-<form class="" action="" method="post">
-    <label for="pseudo">Pseudo</label>
-    <input type="text" name="pseudo" value="">
 
-    <label for="mdp">Mot de passe</label>
-    <input type="password" name="mdp" value="">
-
-    <label for="nom">Nom</label>
-    <input type="text" name="nom" value="">
-
-    <label for="prenom">Prénom</label>
-    <input type="text" name="prenom" value="">
-
-    <label for="email">Email</label>
-    <input type="text" name="email" value="">
-
-    <label for="civilite">Civilité</label>
-    <select class="" name="civilite">
-        <option value="m">Homme</option>
-        <option value="f">Femme</option>
-    </select>
-
-    <input type="submit" value="connexion">
-</form>
+    <form class="" action="" method="post">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Pseudo" name="pseudo" value="">
+        </div>
+        <br>
+        <div class="input-group">
+            <input type="password" class="form-control" placeholder="Mot de passe" name="mdp" value="">
+        </div>
+        <br>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Nom" name="nom" value="">
+        </div>
+        <br>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Prénom" name="prenom" value="">
+        </div>
+        <br>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Email" name="email" value="">
+        </div>
+        <br>
+        <div class="input-group">
+            <select class="form-control" name="civilite">
+                <option value="m">Homme</option>
+                <option value="f">Femme</option>
+            </select>
+        </div>
+        <br>
+        <input class="btn btn-default" type="submit" value="connexion">
+    </form>
 
 <?php
 require_once('inc/footer.inc.php');

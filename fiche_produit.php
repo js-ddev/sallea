@@ -20,15 +20,28 @@ else{
     header('location:boutique.php');
 }
 
-// Traitement d'ajour du produit dans la table commande :
+// Traitement d'affichage de la moyenne des notes de la salle :
+$resultat2 = $pdo -> query("SELECT id_salle, ROUND(AVG(note)) AS 'note' FROM avis WHERE id_salle = $produit[id_salle]");
+$notes = $resultat2 -> fetchAll(PDO::FETCH_ASSOC);
+$note = $notes[0]['note'];
+// debug($note);
+
+// Traitement d'ajout du produit dans la table commande :
 if($_POST){
+    if(userConnecte()){
     // debug($_POST);
     // debug($_SESSION);
     $requete = $pdo -> prepare("INSERT INTO commande(id_membre,id_produit,date_enregistrement) VALUES (:membre,:id_produit,NOW())");
     $requete -> bindParam(':membre', $_SESSION['membre']['id_membre'], PDO::PARAM_INT);
     $requete -> bindParam(':id_produit', $_POST['id_produit'], PDO::PARAM_INT);
     $requete -> execute();
+    }
+    else{
+        $msg .= '<p class="navbar-text">Merci de vous connecter pour pouvoir commander !</p>';;
+    }
+
 }
+
 
 // TRAITEMENT pour afficher les produits suggérés :
 // Requete pour récupérer des produits de la même catégorie (sauf celui qu'on visite)
@@ -49,15 +62,17 @@ $suggestion = $resultatProduit -> fetchAll(PDO::FETCH_ASSOC);
 // }
 
 
-$page = 'Produit';
+$page = 'Produit '.$titre;
 require_once('inc/header.inc.php');
 ?>
 
 <div class="row">
     <div class="col-md-3"><h1><?= $titre ?></h1></div>
-    <div id="produit-etoile" class="note col-md-5">
-        <img src="<?= RACINE_SITE ?>img/star-2.png" alt="etoile">
-    </div>
+          <div class="col-md-5" title="Cette salle a une note moyenne de <?= $note?>/5">
+              <?php for ($i=0; $i < $note ; $i++) : ?>
+                  <span class="glyphicon glyphicon-star"></span>
+              <?php endfor; ?>
+         </div>
     <div class="col-md-4">
         <form action="" method="POST">
             <input type="hidden" value="<?= $id_produit ?>" name="id_produit"/>
@@ -74,7 +89,7 @@ require_once('inc/header.inc.php');
         </div>
         <div class="col-md-12">
             <h2>Localisation</h2>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.436158982598!2d2.3759801156740754!3d48.849892779286556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e6720f50815305%3A0x3e852de6209ac27!2s18+Rue+de+Cotte%2C+75012+Paris%2C+France!5e0!3m2!1sen!2sus!4v1493041816313" frameborder="0" style="border:0" width="400" height="300"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.436158982598!2d2.3759801156740754!3d48.849892779286556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e6720f50815305%3A0x3e852de6209ac27!2s20+Rue+de+tolbiac%2C+75013+Paris%2C+France!5e0!3m2!1sen!2sus!4v1493041816313" frameborder="0" style="border:0" width="400" height="300"></iframe>
         </div>
     </div>
 </div>
