@@ -10,6 +10,145 @@
 
 ?>
 
+
+
+<?php
+
+// Traitement pour récupérer les infos du produit à modifier
+
+if(isset($_GET['id']) && !empty($_GET['id']) && is_numeric($_GET['id'])) { // Si j'ai un id, non vide et bien une valeur numérique... on récupère les infos du produit dans la BDD (SELECT)
+    $resultat = $pdo -> prepare("SELECT * FROM salle WHERE id_salle = :id");
+    $resultat -> bindValue(':id', $_GET['id'], PDO::PARAM_INT);
+    $resultat -> execute();
+
+    // Vérifier si un résultat est retourné
+    if($resultat -> rowCount() > 0){
+        $produit_actuel = $resultat -> fetch(PDO::FETCH_ASSOC);
+      /*  debug($produit_actuel);*/
+    }
+}
+
+// revient à faire :
+    // if(isset($produit_actuel)){
+    //  $reference = $produit_actuel['reference']
+    // }
+    // else{
+    //  $reference = '';
+    // }
+$id_salle = (isset($produit_actuel)) ? $produit_actuel['id_salle'] : '';
+$titre = (isset($produit_actuel)) ? $produit_actuel['titre'] : '';
+$description = (isset($produit_actuel)) ? $produit_actuel['description'] : '';
+$photo = (isset($produit_actuel)) ? $produit_actuel['photo'] : '';
+$pays = (isset($produit_actuel)) ? $produit_actuel['pays'] : '';
+$ville = (isset($produit_actuel)) ? $produit_actuel['ville'] : '';
+$adresse = (isset($produit_actuel)) ? $produit_actuel['adresse'] : '';
+$cp = (isset($produit_actuel)) ? $produit_actuel['cp'] : '';
+$capacite = (isset($produit_actuel)) ? $produit_actuel['capacite'] : '';
+$categorie = (isset($produit_actuel)) ? $produit_actuel['categories'] : '';
+$action = (isset($produit_actuel)) ? 'Modifier' : 'Ajouter';
+
+
+// Traitement pour enregistrer ou modifier un produit
+
+if($_POST) {
+
+    debug($_POST);
+    debug($nom_photo);
+
+    if(isset($_POST['photo_actuelle'])){
+        $nom_photo = $_POST['photo_actuelle'];
+    }
+        // Si je suis dans le cadre d'une modification de produit, alors je prends le nom de sa photo et je stocke dans $nom_photo qui sera enregistré en BDD.
+
+        // ... Mais si une nouvelle photo est postée (je souhaite modifier la photo), alors on entre dans la condition ci-dessous, et $nom_photo prendra la valeur de la nouvelle photo.
+
+
+
+    if(!empty($_FILES['photo']['name'])){ // Si une image nous a été transmise
+        $nom_photo = $_FILES['photo']['name'];
+/*        $nom_photo = $_POST['reference'] . '_' . $_FILES['photo']['name'];
+*/        // On crée un nouveau nom de photo pour éviter les doublons sur notre serveur et dans la BDD.
+
+        $chemin_photo = RACINE_SERVEUR . RACINE_SITE . 'photo/' . $nom_photo;
+        // $chemin_photo est l'emplacement définitif de la photo depyuis la racine du serveur et jusqu'à son nom
+
+        ///  c://xampp/htdocs/php/site/
+        ///  c://xampp/htdocs/  représente localhost (racine du serveur)
+        ///  cf init.inc.php   
+        ///  define('RACINE_SERVEUR', $_SERVER['DOCUMENT_ROOT']);
+
+        // Vérification de l'extension du fichier
+        // On crée un array avec les extensions :  $ext = array('image/png', 'image/jpeg', 'image/gif');
+        $ext = array('image/png', 'image/jpeg', 'image/gif');
+        if(!in_array($_FILES['photo']['type'], $ext)){
+            $msg .= '<div class="erreur"> Veuillez choisir une photo au format : JPEG, JPG, PNG, ou GIF</div>';
+                // ['type'] est trouvé grâce au debug($_FILES); qui affiche les indices des array dans le navigateur
+        }
+
+        // Vérification de la taille du fichier
+        if ($_FILES['photo']['size'] > 1000000){
+            $msg .= '<div class="erreur"> Veuillez choisir une photo de 2 Mo maximum</div>';
+                // ['size'] est trouvé grâce au debug($_FILES); qui affiche les indices des array dans le navigateur
+
+        }
+
+        if(empty($msg)){ // Tout est OK pas d'erreur dans le fichier image
+            copy($_FILES['photo']['tmp_name'], $chemin_photo);  // copie est une fonction qui nous permet de déplacer un fichier. 1er arg : l'emplacement de l'original, et 2ème l'emplacement de la copie (emplacement définitif)
+
+        }
+
+    }  // Fin du IF empty($_FILES etxc...)
+
+
+    // Traitement pour insérer en BDD
+
+    // Au préalable nous aurions vérifier l'intégrité des données (type de caractères, nbre de caractères, taille, is_numeric, empty etc...)
+
+    // Insertion des infos dans la BDD
+
+    if(isset($_GET['id'])){ // Si je suis dans le cadre d'une modification
+    $resultat = $pdo -> prepare("REPLACE INTO salle(id_salle, titre, description, photo, pays, ville, adresse, cp, capacite, categories) VALUES (:id_salle, :titre, :description, :photo, :pays, :ville, :adresse, :cp, :capacite, :categories)");
+
+        $resultat -> bindParam(':id_salle', $_POST['id_salle'], PDO::PARAM_INT);
+    }
+    else{  // ou alors je suis dans le cas d'un ajout
+    $resultat = $pdo -> prepare("INSERT INTO salle(titre, description, photo, pays, ville, adresse, cp, capacite, categories) VALUES (:titre, :description, :photo, :pays, :ville, :adresse, :cp, :capacite, :categories)");
+    }
+
+
+    // STR
+    $resultat -> bindParam(':titre', $_POST['titre'], PDO::PARAM_STR);
+    $resultat -> bindParam(':description', $_POST['description'], PDO::PARAM_STR);
+    $resultat -> bindParam(':pays', $_POST['pays'], PDO::PARAM_STR);
+    $resultat -> bindParam(':ville', $_POST['ville'], PDO::PARAM_STR);
+    $resultat -> bindParam(':adresse', $_POST['adresse'], PDO::PARAM_STR);
+    $resultat -> bindParam(':categories', $_POST['categories'], PDO::PARAM_STR);
+
+    // INT
+    $resultat -> bindParam(':cp', $_POST['cp'], PDO::PARAM_INT);
+    $resultat -> bindParam(':capacite', $_POST['capacite'], PDO::PARAM_INT);
+
+    // Attention : ':photo'  ============>   $nom_photo
+    $resultat -> bindParam(':photo', $nom_photo, PDO::PARAM_STR);
+
+
+    if($resultat -> execute()){
+        $msg .= '<div class="erreur">Enregistrement effectué</div>';
+/*    header('location:gestion_boutique.php');
+*/    }
+    else{
+        $msg .= '<div class="erreur">Erreur dans la requête !!</div>';
+    }
+
+} // Fin du if($_POST)
+
+?>
+
+<h1><?= $action ?> une salle</h1>
+
+<?= $msg ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,14 +194,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-
-                <a class="navbar-brand" href="../boutique.php">Backoffice SalleA</a>
-
+                <a class="navbar-brand" href="index.html">SB Admin</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Bonjour Admin !<b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
@@ -84,20 +221,20 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
+                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="gestion_membres.html"><i class="fa fa-fw fa-table"></i>Gestion des membres</a>
+                    </li>
+                    <li>
+                        <a href="gestion_salles.html"><i class="fa fa-fw fa-table"></i>Gestion des salles</a>
+                    </li>
+                    <li>
 
-                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Acceuil</a>
+                        <a href="gestion_produits.html"><i class="fa fa-fw fa-table"></i>Gestion des produits</a>
                     </li>
                     <li>
-                        <a href="gestion_membres.php"><i class="fa fa-fw fa-table"></i>Gestion des membres</a>
-                    </li>
-                    <li>
-                        <a href="gestion_salles.php"><i class="fa fa-fw fa-table"></i>Gestion des salles</a>
-                    </li>
-                    <li>
-                        <a href="gestion_produits.php"><i class="fa fa-fw fa-table"></i>Gestion des produits</a>
-                    </li>
-                    <li>
-                        <a href="gestion_avis.php"><i class="fa fa-fw fa-star"></i>Gestion des avis</a>
+                        <a href="gestion_avis.html"><i class="fa fa-fw fa-star"></i>Gestion des avis</a>
                     </li>
                     <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Theme <i class="fa fa-fw fa-caret-down"></i></a>
@@ -227,167 +364,13 @@
 
                 <!-- DEBUT FORMULAIRE -->
 
-
-
-
-<?php
-
-// Traitement pour récupérer les infos du produit à modifier
-
-if(isset($_GET['id']) && !empty($_GET['id']) && is_numeric($_GET['id'])) { // Si j'ai un id, non vide et bien une valeur numérique... on récupère les infos du produit dans la BDD (SELECT)
-    $resultat = $pdo -> prepare("SELECT * FROM salle WHERE id_salle = :id");
-    $resultat -> bindValue(':id', $_GET['id'], PDO::PARAM_INT);
-    $resultat -> execute();
-
-    // Vérifier si un résultat est retourné
-    if($resultat -> rowCount() > 0){
-        $produit_actuel = $resultat -> fetch(PDO::FETCH_ASSOC);
-      /*  debug($produit_actuel);*/
-    }
-}
-
-
-// revient à faire :
-    // if(isset($produit_actuel)){
-    //  $reference = $produit_actuel['reference']
-    // }
-    // else{
-    //  $reference = '';
-    // }
-$id_salle = (isset($produit_actuel)) ? $produit_actuel['id_salle'] : '';
-$titre = (isset($produit_actuel)) ? $produit_actuel['titre'] : '';
-$description = (isset($produit_actuel)) ? $produit_actuel['description'] : '';
-$photo = (isset($produit_actuel)) ? $produit_actuel['photo'] : '';
-$pays = (isset($produit_actuel)) ? $produit_actuel['pays'] : '';
-$ville = (isset($produit_actuel)) ? $produit_actuel['ville'] : '';
-$adresse = (isset($produit_actuel)) ? $produit_actuel['adresse'] : '';
-$cp = (isset($produit_actuel)) ? $produit_actuel['cp'] : '';
-$capacite = (isset($produit_actuel)) ? $produit_actuel['capacite'] : '';
-$categorie = (isset($produit_actuel)) ? $produit_actuel['categories'] : '';
-$action = (isset($produit_actuel)) ? 'Modifier' : 'Ajouter';
-
-
-
-
-
-// Traitement pour enregistrer ou modifier un produit
-
-if($_POST) {
-
-    debug($_POST);
-    debug($nom_photo);
-
-    if(isset($_POST['photo'])){
-        $nom_photo = $_POST['photo'];
-    }
-        // Si je suis dans le cadre d'une modification de produit, alors je prends le nom de sa photo et je stocke dans $nom_photo qui sera enregistré en BDD.
-
-        // ... Mais si une nouvelle photo est postée (je souhaite modifier la photo), alors on entre dans la condition ci-dessous, et $nom_photo prendra la valeur de la nouvelle photo.
-
-
-
-    if(!empty($_FILES['photo']['name'])){ // Si une image nous a été transmise
-        $nom_photo = $_POST['reference'] . '_' . $_FILES['photo']['name'];
-        // On crée un nouveau nom de photo pour éviter les doublons sur notre serveur et dans la BDD.
-
-        $chemin_photo = RACINE_SERVEUR . RACINE_SITE . 'photo/' . $nom_photo;
-        // $chemin_photo est l'emplacement définitif de la photo depyuis la racine du serveur et jusqu'à son nom
-
-        ///  c://xampp/htdocs/php/site/
-        ///  c://xampp/htdocs/  représente localhost (racine du serveur)
-        ///  cf init.inc.php   
-        ///  define('RACINE_SERVEUR', $_SERVER['DOCUMENT_ROOT']);
-
-        // Vérification de l'extension du fichier
-        // On crée un array avec les extensions :  $ext = array('image/png', 'image/jpeg', 'image/gif');
-        $ext = array('image/png', 'image/jpeg', 'image/gif');
-        if(!in_array($_FILES['photo']['type'], $ext)){
-            $msg .= '<div class="erreur"> Veuillez choisir une photo au format : JPEG, JPG, PNG, ou GIF</div>';
-                // ['type'] est trouvé grâce au debug($_FILES); qui affiche les indices des array dans le navigateur
-        }
-
-        // Vérification de la taille du fichier
-        if ($_FILES['photo']['size'] > 1000000){
-            $msg .= '<div class="erreur"> Veuillez choisir une photo de 2 Mo maximum</div>';
-                // ['size'] est trouvé grâce au debug($_FILES); qui affiche les indices des array dans le navigateur
-
-        }
-
-        if(empty($msg)){ // Tout est OK pas d'erreur dans le fichier image
-            copy($_FILES['photo']['tmp_name'], $chemin_photo);  // copie est une fonction qui nous permet de déplacer un fichier. 1er arg : l'emplacement de l'original, et 2ème l'emplacement de la copie (emplacement définitif)
-
-        }
-
-    }  // Fin du IF empty($_FILES etxc...)
-
-
-    // Traitement pour insérer en BDD
-
-    // Au préalable nous aurions vérifier l'intégrité des données (type de caractères, nbre de caractères, taille, is_numeric, empty etc...)
-
-    // Insertion des infos dans la BDD
-
-    if(isset($_GET['id'])){ // Si je suis dans le cadre d'une modification
-    $resultat = $pdo -> prepare("REPLACE INTO salle(id_salle, titre, description, photo, pays, ville, adresse, cp, capacite, categories) VALUES (:id_salle, :titre, :description, :photo, :pays, :ville, :adresse, :cp, :capacite, :categories)");
-
-        $resultat -> bindParam(':id_salle', $_POST['id_salle'], PDO::PARAM_INT);
-    }
-    else{  // ou alors je suis dans le cas d'un ajout
-    $resultat = $pdo -> prepare("INSERT INTO salle(id_salle, titre, description, photo, pays, ville, adresse, cp, capacite, categories) VALUES (:id_salle, :titre, :description, :photo, :pays, :ville, :adresse, :cp, :capacite, :categories)");
-    }
-
-
-    // STR
-    $resultat -> bindParam(':titre', $_POST['titre'], PDO::PARAM_STR);
-    $resultat -> bindParam(':description', $_POST['description'], PDO::PARAM_STR);
-    $resultat -> bindParam(':pays', $_POST['pays'], PDO::PARAM_STR);
-    $resultat -> bindParam(':ville', $_POST['ville'], PDO::PARAM_STR);
-    $resultat -> bindParam(':adresse', $_POST['adresse'], PDO::PARAM_STR);
-    $resultat -> bindParam(':categories', $_POST['categories'], PDO::PARAM_STR);
-
-    // INT
-    $resultat -> bindParam(':id_salle', $_POST['id_salle'], PDO::PARAM_INT);
-    $resultat -> bindParam(':cp', $_POST['cp'], PDO::PARAM_INT);
-    $resultat -> bindParam(':capacite', $_POST['capacite'], PDO::PARAM_INT);
-
-    // Attention : ':photo'  ============>   $nom_photo
-    $resultat -> bindParam(':photo', $nom_photo, PDO::PARAM_STR);
-
-
-    if($resultat -> execute()){
-        $msg .= '<div class="erreur">Enregistrement effectué</div>';
-/*    header('location:gestion_boutique.php');
-*/    }
-    else{
-        $msg .= '<div class="erreur">Erreur dans la requête !!</div>';
-    }
-
-} // Fin du if($_POST)
-
-
-?>
-
-<h1><?= $action ?> un produit</h1>
-
-<?= $msg ?>
-
-
-
-
-
-
-
-
-
-
-
                 <form role="form" method="POST">
 
                     <div class="row">
 
                         <div class="col-lg-6"> <!-- formulaire coté gauche -->
 
-                            <input type="hidden" name="id_produit" value="<?= $id_produit ?>" />
+                            <input type="hidden" name="id_salle" value="<?= $id_salle ?>" />
 
                             <div class="form-group">
                                 <label>Titre</label>
@@ -397,14 +380,15 @@ if($_POST) {
                             <div class="form-group">
                                 <label>Description</label>
                                 <textarea class="form-control" rows="3" placeholder="Description de la salle" name="description"><?= $description ?></textarea>
-
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="photo">
+                                <?php if(isset($produit_actuel)) : ?>
+                                    <input type="hidden" name="photo_actuelle" value="<?= $photo ?>">
+                                    <img src="<?= RACINE_SITE . 'photo/' . $photo ?>" width="150" /><br/><br/>
+                                <?php endif; ?>
                                 <label>Photo</label>
-
-                                <input type="file" name="photo" value="<?= $photo ?>">
-
+                                <input type="file" name="photo">
                             </div>
 
                             <div class="form-group">
@@ -428,26 +412,21 @@ if($_POST) {
                             <div class="form-group">
                                 <label>Pays</label>
                                 <input class="form-control" placeholder="Pays dans laquelle se trouve la salle" name="pays" value="<?= $pays ?>">
-
                             </div>
 
                             <div class="form-group">
                                 <label>Ville</label>
                                 <input class="form-control" placeholder="Ville dans laquelle se trouve la salle" name="ville" value="<?= $ville ?>">
-
                             </div>
 
                             <div class="form-group">
                                 <label>Adresse</label>
-
                                 <textarea class="form-control" rows="3" placeholder="Adresse de la salle" name="adresse"><?= $adresse ?></textarea>
-
                             </div>
 
 
                             <div class="form-group">
                                 <label>Code Postal</label>
-
                                 <input class="form-control" placeholder="Code Postal de la ville dans laquelle se trouve la salle" name="cp" value="<?= $cp ?>">
                             </div>
 
@@ -460,7 +439,6 @@ if($_POST) {
                     </div>
 
                 </form>
-
 
                 <!-- FIN FORMULAIRE -->
 
