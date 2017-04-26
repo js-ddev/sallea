@@ -89,7 +89,7 @@ require_once('inc/header.inc.php');
         </div>
         <div class="col-md-12">
             <h2>Localisation</h2>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.436158982598!2d2.3759801156740754!3d48.849892779286556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e6720f50815305%3A0x3e852de6209ac27!2s18+Rue+de+Cotte%2C+75012+Paris%2C+France!5e0!3m2!1sen!2sus!4v1493041816313" frameborder="0" style="border:0" width="400" height="300"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.436158982598!2d2.3759801156740754!3d48.849892779286556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e6720f50815305%3A0x3e852de6209ac27!2s20+Rue+de+tolbiac%2C+75013+Paris%2C+France!5e0!3m2!1sen!2sus!4v1493041816313" frameborder="0" style="border:0" width="400" height="300"></iframe>
         </div>
     </div>
 </div>
