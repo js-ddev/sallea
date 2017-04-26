@@ -1,5 +1,6 @@
 <?php
 
+$msg2 = '';
 require_once('inc/init.inc.php');
 
 if($_POST){
@@ -14,18 +15,18 @@ if($_POST){
     if(!empty($_POST['pseudo'])){ // Est-ce que le pseudo est bien rempli ?
         if($verif_caracteres){ // Est ce que $verif_caracteres est bien == TRUE ?
             if(strlen($_POST['pseudo']) < 3 || strlen($_POST['pseudo']) > 20){ // Est-ce que le nombre de caractères est correct pour la BDD ?
-                $msg .='<div class="erreur">Veuillez renseigner un pseudo de 3 à 20 caractères max</div>';
+                $msg2 .='<div class="erreur">Veuillez renseigner un pseudo de 3 à 20 caractères max</div>';
             }
         }
         else {
-            $msg .='<div class="erreur">Caractères autorisés : lettre, chiffres, et caractères _-.</div>';
+            $msg2 .='<div class="erreur">Caractères autorisés : lettre, chiffres, et caractères _-.</div>';
         }
     }
     else{
-        $msg .='<div class="erreur">Merci de nous indiquer ton pseudo</div>';
+        $msg2 .='<div class="erreur">Merci de nous indiquer votre pseudo</div>';
     }
 
-    if(empty($msg)){
+    if(empty($msg2)){
 
         // Vérifier que le pseudo est disponible :
         $resultat = $pdo -> prepare("SELECT * FROM membre WHERE pseudo = :pseudo");
@@ -33,7 +34,7 @@ if($_POST){
         $resultat -> execute();
 
         if($resultat -> rowCount() > 0){ // Dans ce cas, problème car le pseudo existe déjà
-            $msg .='<div class="erreur">Ce pseudo '.$_POST['pseudo'].' n\'est pas disponible, merci d\en choisir un autre !</div>';
+            $msg2 .='<div class="erreur">Ce pseudo '.$_POST['pseudo'].' n\'est pas disponible, merci d\en choisir un autre !</div>';
 
             // $newpseudo1 = $_POST['pseudo'].rand(111,999);
             // Exemple de proposition de pseudo, mais il faut vérifier qu'il n'a pas été déjà pris (ou ajout du code postal ?)
@@ -68,7 +69,7 @@ require_once('inc/header.inc.php');
 ?>
 
 <h1>Inscription</h1>
-<?= $msg ?>
+<?= $msg2 ?>
 
     <form class="" action="" method="post">
         <div class="input-group">

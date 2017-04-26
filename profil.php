@@ -25,27 +25,29 @@ else{
 $page = 'Profil';
 require_once('inc/header.inc.php');
 ?>
-<h1>Profil de <?= $pseudo ?> </h1>
-
-<div class="profil">
-	<p>Bonjour <?= $pseudo ?> !!</p><br/>
-
-	<div class="profil_img">
-		<img src="img/default.png" />
+<div class="profil panel panel-default">
+	<div class="panel-heading">
+		<h1>Votre profil :</h1>
 	</div>
-	<div class="profil_infos">
-		<ul>
-			<li>Pseudo : <b><?= $pseudo ?></b></li>
-			<li>Prénom : <b><?= $prenom ?></b></li>
-			<li>Nom : <b><?= $nom ?></b></li>
-			<li>Email : <b><?= $email ?></b></li>
-		</ul>
+	<div class=" row profil_img">
+		<div class="col-md-6 profil_infos">
+			<h2>Bonjour <?= $pseudo ?>, voici un résumé de vos informations :</h2>
+			<ul>
+				<li>Pseudo : <b><?= $pseudo ?></b></li>
+				<li>Prénom : <b><?= $prenom ?></b></li>
+				<li>Nom : <b><?= $nom ?></b></li>
+				<li>Email : <b><?= $email ?></b></li>
+			</ul>
+		</div>
+		<div class="col-md-6">
+			<img src="img/default.png" style="max-height:150px;margin:auto"/>
+		</div>
 	</div>
 </div>
 
 <div class="profil">
 
-	<h2>Détails de ma commande</h2>
+	<h2>Détails de vos commandes</h2>
 
 	<!-- S'il y a des commandes j'affiche les détails : -->
 	<?php if($resultat -> rowCount() > 0) : ?>
@@ -54,10 +56,8 @@ require_once('inc/header.inc.php');
 		<?php for($i = 0; $i < count($commande); $i ++) : ?>
 
 
-			<hr/><h4>Commande passé le <?= $commande[$i]['date_commande'] ?> : </h4>
-			<p>Numéro de commande : <b><?= $commande[$i]['id_commande'] ?></b></p>
-			<hr/>
-			<p>Détails de la commande</p>
+			<hr/><h4>Commande numéro <?= $commande[$i]['id_commande'] ?> passée le <?= $commande[$i]['date_commande'] ?> : </h4>
+
 
 
 			<?php
@@ -95,14 +95,12 @@ require_once('inc/header.inc.php');
 			foreach($details as $indice => $valeur){
 
 				echo '<img src="photo/' . $valeur['photo'] . '" width="150"/>';
-				echo '<p>
+				echo '<br /><p>
 				Nom : ' . $valeur['titre'] . '<br/>
 				Capacité : ' . $valeur['capacite'] . '<br/>
 				Catégorie : ' . $valeur['categories'] . '<br/>
-				Adresse : ' . $valeur['adresse'] . ',<br/>' . $valeur['cp'] . ', ' . $valeur['ville'] . ', ' . $valeur['pays'] . '<br/>
-				<hr/>
+				Adresse : ' . $valeur['adresse'] . ' - ' . $valeur['cp'] . ', ' . $valeur['ville'] . ', ' . $valeur['pays'] . '<br/>
 				Tarif de location : ' . $valeur['prix'] . '€ttc<br/>
-				<hr/>
 
 				Date d\'arrivée : ' . $valeur['date_arrivee'] . '<br/>
 				Date de départ : ' . $valeur['date_depart'] . '<br/>

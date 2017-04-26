@@ -11,7 +11,7 @@ if(isset($_GET['action']) && $_GET['action'] == 'deconnexion'){
 // }
 
 // traitements pour connecter l'utilisateur
-if($_POST && !isset($_POST['id_produit'])){
+if(isset($_POST['connexion']) && !isset($_POST['id_produit'])){
 
     // debug($_POST);
 
@@ -63,7 +63,7 @@ if($_POST && !isset($_POST['id_produit'])){
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-default">
+        <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
@@ -78,8 +78,7 @@ if($_POST && !isset($_POST['id_produit'])){
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Qui sommes nous<span class="sr-only">(current)</span></a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Qui sommes nous<span class="sr-only">(current)</span></a></li>
                         <li><?= $msg ?></li>
                     </ul>
                     <?php if(userConnecte()): ?>
@@ -88,9 +87,9 @@ if($_POST && !isset($_POST['id_produit'])){
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Espace membre<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="<?= RACINE_SITE ?>connexion.php?action=deconnexion">Deconnexion</a></li>
-                                    <li role="separator" class="divider"></li>
                                     <li><a href="profil.php">Profil</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="<?= RACINE_SITE ?>connexion.php?action=deconnexion">Deconnexion</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -122,7 +121,7 @@ if($_POST && !isset($_POST['id_produit'])){
             	<label>Mot de passe : </label>
             	<input type="password" name="mdp" />
 
-            	<input type="submit" value="Connexion" />
+            	<input type="submit" name="connexion" value="Connexion" />
             </form>
         </div>
     </header>
