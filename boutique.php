@@ -5,20 +5,31 @@ $result = $pdo -> query("select distinct ville from salle order by ville");
 $categories = $pdo -> query("select distinct categories from salle order by categories");
 $capacite = $pdo -> query("select distinct capacite from salle order by capacite");
 $prix = $pdo -> query("select distinct prix from produit order by prix");
-// requête générique :
+
+
+
+// requête générique : 
 $req = "
-select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville
-from salle s, produit p
+select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville 
+from salle s, produit p 
 where s.id_salle = p.id_salle
 ";
+
+
+
+
+
 // Fonctionnement pour générer une requête qui va récupérer toutes les données dans l'url
 foreach($_GET as $indice => $valeur){
 	if($valeur != ''){
-		$req .= "AND $indice = '$valeur' ";
+		$req .= "AND $indice = '$valeur' "; 
 	}
 }
+
 $resultat = $pdo -> prepare($req);
-// on génère les bindValue !
+
+// on génère les bindValue ! 
+
 /*foreach($_GET as $indice => $valeur){
 	if($valeur != ''){
 		$resultat -> bindValue("':" . $indice . "'", $valeur, PDO::PARAM_STR);
@@ -29,53 +40,90 @@ $resultat = $pdo -> prepare($req);
 		echo '<br/>';
 	}
 }*/
-//$resultat = $pdo -> query($req);
+
+
+//$resultat = $pdo -> query($req); 
+
+
+
 /*if(isset($_GET['ville'])) {
+
 	$resultat = $pdo -> prepare (
 		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle and ville = :ville");
 	$resultat -> bindValue(':ville', $_GET['ville'], PDO::PARAM_STR);
 }
+
 if(isset($_GET['prix'])){
+
 	$resultat = $pdo -> prepare (
 		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle and prix = :prix");
 	$resultat -> bindValue(':prix', $_GET['prix'], PDO::PARAM_STR);
-
+	
 }
+
 if(isset($_GET['capacite'])){
+
 	$resultat = $pdo -> prepare (
 		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle and capacite = :capacite");
 	$resultat -> bindValue(':capacite', $_GET['capacite'], PDO::PARAM_STR);
 }
+
+
 if(isset($_GET['date_arrivee'])){
+
 	$resultat = $pdo -> prepare (
 		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle and date_arrivee = :date_arrivee");
 	$resultat -> bindValue(':date_arrivee', $_GET['date_arrivee'], PDO::PARAM_STR);
 }
+
 if(isset($_GET['date_depart'])){
+
 	$resultat = $pdo -> prepare (
 		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle and date_depart = :date_depart");
 	$resultat -> bindValue(':date_depart', $_GET['date_depart'], PDO::PARAM_STR);
 }
+
 */
 if($resultat -> execute()){
 	if($resultat -> rowCount() > 0) { // si ma requete m'a trouvé au moins un produit...
 		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
+
 	}
 	else{
+
 		// pas de résultat !
 		$resultat = $pdo -> query("select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville from salle s, produit p where s.id_salle = p.id_salle");
 		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
+
 		echo "Il n'y a pas de résultat";
+
+
 	}
+
 }
 else{
 	echo "Il y a une erreur dans la requete";
 }
+
+
+
+
 //debug($_GET);
 //debug($resultats);
 // END OF SELECTION
+
+
+
+
+
+
+
+
+
+
 $page = 'Boutique';
 require('inc/header.inc.php');
+
 ?>
 
 <h1 style="text-align: center"> Boutique </h1>
@@ -142,11 +190,11 @@ require('inc/header.inc.php');
 
 
 				<label class="form-group">Période</label><br/>
-
+				
 				<span class="glyphicon glyphicon-calendar"></span> Date d'arrivée<br/><br/>
 				</span>
 				<input type="date" name="date_arrivee" class="form-control"><br/><br/>
-
+				
 				<span name="depart" class="glyphicon glyphicon-calendar"></span> Date de départ<br/><br/>
 				</span>
 				<input type="date" name="date_depart" class="form-control"><br/><br/>

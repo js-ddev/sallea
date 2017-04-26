@@ -55,12 +55,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">SB Admin</a>
+
+                <a class="navbar-brand" href="../boutique.php">Backoffice SalleA</a>
+
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Bonjour Admin !<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
@@ -82,20 +84,20 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
-                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="gestion_membres.html"><i class="fa fa-fw fa-table"></i>Gestion des membres</a>
-                    </li>
-                    <li>
-                        <a href="gestion_salles.html"><i class="fa fa-fw fa-table"></i>Gestion des salles</a>
-                    </li>
-                    <li>
 
-                        <a href="gestion_produits.html"><i class="fa fa-fw fa-table"></i>Gestion des produits</a>
+                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Acceuil</a>
                     </li>
                     <li>
-                        <a href="gestion_avis.html"><i class="fa fa-fw fa-star"></i>Gestion des avis</a>
+                        <a href="gestion_membres.php"><i class="fa fa-fw fa-table"></i>Gestion des membres</a>
+                    </li>
+                    <li>
+                        <a href="gestion_salles.php"><i class="fa fa-fw fa-table"></i>Gestion des salles</a>
+                    </li>
+                    <li>
+                        <a href="gestion_produits.php"><i class="fa fa-fw fa-table"></i>Gestion des produits</a>
+                    </li>
+                    <li>
+                        <a href="gestion_avis.php"><i class="fa fa-fw fa-star"></i>Gestion des avis</a>
                     </li>
                     <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Theme <i class="fa fa-fw fa-caret-down"></i></a>
@@ -224,9 +226,6 @@
                 <!-- FIN TABLEAU DES SALLES -->
 
                 <!-- DEBUT FORMULAIRE -->
-
-
-
 
 
 
@@ -398,11 +397,14 @@ if($_POST) {
                             <div class="form-group">
                                 <label>Description</label>
                                 <textarea class="form-control" rows="3" placeholder="Description de la salle" name="description"><?= $description ?></textarea>
+
                             </div>
 
                             <div class="form-group">
                                 <label>Photo</label>
+
                                 <input type="file" name="photo" value="<?= $photo ?>">
+
                             </div>
 
                             <div class="form-group">
@@ -426,21 +428,26 @@ if($_POST) {
                             <div class="form-group">
                                 <label>Pays</label>
                                 <input class="form-control" placeholder="Pays dans laquelle se trouve la salle" name="pays" value="<?= $pays ?>">
+
                             </div>
 
                             <div class="form-group">
                                 <label>Ville</label>
                                 <input class="form-control" placeholder="Ville dans laquelle se trouve la salle" name="ville" value="<?= $ville ?>">
+
                             </div>
 
                             <div class="form-group">
                                 <label>Adresse</label>
+
                                 <textarea class="form-control" rows="3" placeholder="Adresse de la salle" name="adresse"><?= $adresse ?></textarea>
+
                             </div>
 
 
                             <div class="form-group">
                                 <label>Code Postal</label>
+
                                 <input class="form-control" placeholder="Code Postal de la ville dans laquelle se trouve la salle" name="cp" value="<?= $cp ?>">
                             </div>
 
@@ -453,6 +460,7 @@ if($_POST) {
                     </div>
 
                 </form>
+
 
                 <!-- FIN FORMULAIRE -->
 
