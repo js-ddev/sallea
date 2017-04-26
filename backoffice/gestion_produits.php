@@ -1,3 +1,19 @@
+<?php
+require('../inc/init.inc.php');
+
+if(!userAdmin()){
+    header('location:../profil.php');
+}
+
+// Traitement pour récupérer tous les produits :
+
+$resultat = $pdo -> query(
+"select p.id_produit, p.date_arrivee, p.date_depart, s.id_salle, s.titre, s.photo, p.prix, p.etat from salle s, produit p where s.id_salle = p.id_salle");
+
+$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +25,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin - Bootstrap Admin Template</title>
+    <title>Gestion des produits</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -32,7 +48,7 @@
 <body>
 
     <div id="wrapper">
-
+        <!-- <?= debug($resultats); ?> -->
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -117,8 +133,9 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Blank Page
-                            <small>Subheading</small>
+                            Gestion des produits
+                            <small>Consulter | Créer | Modifier | Supprimer</small>
+
                         </h1>
                         <ol class="breadcrumb">
                             <li>
@@ -131,6 +148,123 @@
                     </div>
                 </div>
                 <!-- /.row -->
+
+
+                <!-- DEBUT TABLEAU DES PRODUITS -->
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <h2>Tableau des produits (créneaux de réservation de salle)</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>id_produit</th>
+                                        <th>Date d'arrivée</th>
+                                        <th>Date de départ</th>
+                                        <th>id_salle</th>
+                                        <th>Prix</th>
+                                        <th>Etat</th>
+                                        <th colspan="3">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php for ($i=0; $i < sizeof($resultats); $i++): ?>
+                                    <tr>
+                                        <td><?= $resultats[$i]['id_produit'] ?></td>
+                                        <td><?= $resultats[$i]['date_arrivee']  ?></td>
+                                        <td><?= $resultats[$i]['date_depart']  ?></td>
+                                        <td><?= $resultats[$i]['id_salle']  ?>. <?= $resultats[$i]['titre']  ?><br /><img src="../photo/<?= $resultats[$i]['photo']?>" width="50"></td>
+                                        <td><?= $resultats[$i]['prix'] ?></td>
+                                        <td><?= $resultats[$i]['etat'] ?></td>
+                                        <td><a href="../fiche_produit.php?id=<?= $resultats[$i]['id_produit']?>"><span class="glyphicon glyphicon-search"></span></a></td>
+                                        <td><span class="glyphicon glyphicon-edit"></span></td>
+                                        <td><span class="glyphicon glyphicon-trash"></span></td>
+                                    </tr>
+                                <?php endfor; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FIN TABLEAU DES SALLES -->
+
+                <!-- DEBUT FORMULAIRE -->
+
+                <div class="row">
+
+                    <div class="col-lg-6"> <!-- formulaire coté gauche -->
+
+                        <form role="form">
+
+                            <div class="form-group">
+                                <label>Titre</label>
+                                <input class="form-control" placeholder="Titre de la salle">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea class="form-control" rows="3" placeholder="Description de la salle"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Photo</label>
+                                <input type="file">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Capacité</label>
+                                <input class="form-control" placeholder="Capacité de la salle">
+                            </div>
+
+                            <!-- Faire une boucle pour récupérer les catégories -->
+
+                            <div class="form-group">
+                                <label>Catégorie</label>
+                                <select class="form-control">
+                                    <option>Réunion</option>
+                                    <option>Bureau</option>
+                                    <option>Formation</option>
+                                </select>
+                            </div>
+
+                    </div>
+
+                    <div class="col-lg-6"> <!-- formulaire coté droit -->
+
+                            <div class="form-group">
+                                <label>Pays</label>
+                                <input class="form-control" placeholder="Pays dans laquelle se trouve la salle">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Ville</label>
+                                <input class="form-control" placeholder="Ville dans laquelle se trouve la salle">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Adresse</label>
+                                <textarea class="form-control" rows="3" placeholder="Adresse de la salle"></textarea>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>Code Postal</label>
+                                <input class="form-control" placeholder="Code Postal de la ville dans laquelle se trouve la salle">
+                            </div>
+
+                            <button type="submit" class="btn btn-default">Submit Button</button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <!-- FIN FORMULAIRE -->
+
 
             </div>
             <!-- /.container-fluid -->

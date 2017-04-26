@@ -11,7 +11,7 @@ $prix = $pdo -> query("select distinct prix from produit order by prix");
 
 // requete colonne droite :
 /*$resultat = $pdo -> query(
-"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville 
+"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville
 
 from salle s, produit p
 where s.id_salle = p.id_salle");
@@ -32,14 +32,14 @@ if(isset($_GET['ville'])){
 
 	if($resultat -> rowCount() > 0) { // si ma requete m'a trouvé au moins un produit...
 		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
-		
+
 	}
 	else{
 // aucun produit trouvé!
 		// cela peut signifier que le nom de la catégorie a été modifié directement dans l'URL (cas exceptionnel: entre l'arrivée sur la page boutique et le clic sur la catégorie, il n'y a plus aucun produit de cette catégorie).
 		// soit on redirige vers boutique.php, soit vers une 404, ou alors on affiche tous les produits
 			$resultat = $pdo -> query(
-		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville 
+		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville
 		from salle s, produit p
 		where s.id_salle = p.id_salle AND ville = :ville");
 
@@ -49,18 +49,18 @@ if(isset($_GET['ville'])){
 	}
 
 }//fin du if isset ($_GET['categorie'])
-else { 
+else {
 			$resultat = $pdo -> query(
-		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville 
+		"select p.id_produit, s.capacite, p.prix, p.date_arrivee, p.date_depart, s.photo, s.titre, s.description, s.ville
 		from salle s, produit p
 		where s.id_salle = p.id_salle");
 
 		$resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
-		// on est dans le else, il n'y a pas de parametre categorie dans l'URL... on affiche donc tous les produits	
-		
+		// on est dans le else, il n'y a pas de parametre categorie dans l'URL... on affiche donc tous les produits
+
 }
 
-debug($resultats);
+// debug($resultats);
 
 
 
@@ -80,7 +80,7 @@ debug($resultats);
 
 
 $page = 'Boutique';
-require('inc/header.inc-modal.php');
+require('inc/header.inc.php');
 
 ?>
 
@@ -88,7 +88,7 @@ require('inc/header.inc-modal.php');
 
 
 		<div class="col-lg-2">  <!-- DEBUT BLOC CONTENER NAV GAUCHE -->
-			
+
 			<form>
 				<label class="form-group">Catégorie</label><br/>
 				<select class="form-control">
@@ -127,33 +127,33 @@ require('inc/header.inc-modal.php');
 				<label class="form-group">Prix (€)</label><br/>
 				<select class="form-control">
 				<?php while ($price = $prix -> fetch(PDO::FETCH_ASSOC)) : ?>
-					
+
 					<?php  foreach($price as $key => $value) : ?>
 					<option value="<?= $value ?>"><?= $value ?></option>
 					<?php endforeach; ?>
 
 				<?php endwhile; ?>
 				</select><br/><br/>
-				
+
 
 
 				<label class="form-group">Période</label><br/>
-				
+
 				<form><span class="glyphicon glyphicon-calendar"></span> Date d'arrivée<br/><br/>
 				</span>
 				<input type="date" name="arrive" class="form-control"><br/><br/>
-				
+
 				<form><span class="glyphicon glyphicon-calendar"></span> Date de départ<br/><br/>
 				</span>
 				<input type="date" name="arrive" class="form-control"><br/><br/>
-				
+
 
 
 
   				<input type="submit" class="btn btn-success" value="Valider">
 
 			</form>
-			
+
 		</div>  <!-- FIN BLOC CONTENER NAV GAUCHE -->
 
 
@@ -196,6 +196,3 @@ require('inc/header.inc-modal.php');
 		<li><a href="#">Next</a></li>
 	</ul>
 </nav>
-			
-
-		
