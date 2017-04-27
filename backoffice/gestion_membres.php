@@ -76,7 +76,7 @@ $resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
-                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Acceuil</a>
+                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Accueil</a>
                     </li>
                     <li>
                         <a href="gestion_membres.php"><i class="fa fa-fw fa-table"></i>Gestion des membres</a>
