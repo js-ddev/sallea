@@ -16,7 +16,7 @@ if(userConnecte()){
 }
 
 // traitements pour connecter l'utilisateur
-if($_POST){
+if(isset($_POST['page'])){
 
 	// debug($_POST);
 
@@ -36,9 +36,9 @@ if($_POST){
 		if($membre['mdp'] == $mdp){ // si le MDP dans la BDD est équivalent au MDP dans le post [crypté MD5], alors on peut connecter USER.
 			// Enregistrer dans la session toutes les informations concernant cette utisateur
 
-			// foreach($membre as $indice => $valeur){
-			// 	$_SESSION['membre'][$indice] = $valeur;
-			// }
+			foreach($membre as $indice => $valeur){
+				$_SESSION['membre'][$indice] = $valeur;
+			}
 
 			// redirection vers le profil
 			header('location:profil.php');
@@ -64,7 +64,7 @@ require_once('inc/header.inc.php');
 	<label>Mot de passe : </label>
 	<input type="password" name="mdp" />
 
-	<input type="submit" value="Connexion" />
+	<input type="submit" name="page" value="Connexion" />
 </form>
 
 <?php

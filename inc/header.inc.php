@@ -78,7 +78,6 @@ if(isset($_POST['connexion']) && !isset($_POST['id_produit'])){
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li><a href="#">Qui sommes nous<span class="sr-only">(current)</span></a></li>
                         <li><?= $msg ?></li>
                     </ul>
                     <?php if(userConnecte()): ?>

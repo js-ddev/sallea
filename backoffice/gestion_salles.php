@@ -52,8 +52,8 @@ $action = (isset($produit_actuel)) ? 'Modifier' : 'Ajouter';
 
 if($_POST) {
 
-    debug($_POST);
-    debug($nom_photo);
+    // debug($_POST);
+    // debug($nom_photo);
 
     if(isset($_POST['photo_actuelle'])){
         $nom_photo = $_POST['photo_actuelle'];
@@ -74,7 +74,8 @@ if($_POST) {
 
         ///  c://xampp/htdocs/php/site/
         ///  c://xampp/htdocs/  représente localhost (racine du serveur)
-        ///  cf init.inc.php   
+
+        ///  cf init.inc.php
         ///  define('RACINE_SERVEUR', $_SERVER['DOCUMENT_ROOT']);
 
         // Vérification de l'extension du fichier
@@ -144,7 +145,8 @@ if($_POST) {
 
 ?>
 
-<h1><?= $action ?> une salle</h1>
+
+<!-- <h1><?= $action ?> une salle</h1> -->
 
 <?= $msg ?>
 
@@ -194,7 +196,9 @@ if($_POST) {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">SB Admin</a>
+
+                <a class="navbar-brand" href="../boutique.php">Backoffice SalleA</a>
+
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -202,17 +206,7 @@ if($_POST) {
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="../connexion.php?action=deconnexion"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>
                     </ul>
                 </li>
@@ -221,7 +215,9 @@ if($_POST) {
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
-                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+
+                      <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Accueil</a>
+
                     </li>
                     <li>
                         <a href="gestion_membres.html"><i class="fa fa-fw fa-table"></i>Gestion des membres</a>
@@ -359,7 +355,7 @@ if($_POST) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- FIN TABLEAU DES SALLES -->
 
                 <!-- DEBUT FORMULAIRE -->
@@ -406,7 +402,7 @@ if($_POST) {
                             </div>
 
                         </div>
-                        
+
                         <div class="col-lg-6"> <!-- formulaire coté droit -->
 
                             <div class="form-group">
