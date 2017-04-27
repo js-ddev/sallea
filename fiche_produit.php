@@ -38,7 +38,7 @@ if(isset($_POST['reservation'])){
     header('location:profil.php');
     }
     else{
-        $msg .= '<p class="navbar-text">Merci de vous connecter pour pouvoir commander !</p>';;
+        header('location:inscription.php');
     }
 
 }

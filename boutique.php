@@ -127,8 +127,18 @@ require('inc/header.inc.php');
 ?>
 
 <h1 style="text-align: center"> Nos salles
-<?php if(isset($_GET['ville'])) : ?>
+	<!-- Traitement pour modifier le titre : -->
+<?php if(!empty($_GET['ville'])) : ?>
 à <?= $_GET['ville'] ?>
+<?php endif; ?>
+<?php if(!empty($_GET['categories'])) : ?>
+ de <?= $_GET['categories'] ?>
+<?php endif; ?>
+<?php if(!empty($_GET['capacite'])) : ?>
+ pour <?= $_GET['capacite'] ?> personnes
+<?php endif; ?>
+<?php if(!empty($_GET['prix'])) : ?>
+ à <?= $_GET['prix'] ?> €
 <?php endif; ?>
 </h1>
 <div class="container"> <!-- DEBUT BLOC CONTENER GLOBAL -->

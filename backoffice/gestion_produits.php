@@ -67,17 +67,7 @@ $resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Bonjour Admin !<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="../connexion.php?action=deconnexion"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>
                     </ul>
                 </li>
@@ -190,81 +180,6 @@ $resultats = $resultat -> fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <!-- FIN TABLEAU DES SALLES -->
-
-                <!-- DEBUT FORMULAIRE -->
-
-                <div class="row">
-
-                    <div class="col-lg-6"> <!-- formulaire coté gauche -->
-
-                        <form role="form">
-
-                            <div class="form-group">
-                                <label>Titre</label>
-                                <input class="form-control" placeholder="Titre de la salle">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea class="form-control" rows="3" placeholder="Description de la salle"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Photo</label>
-                                <input type="file">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Capacité</label>
-                                <input class="form-control" placeholder="Capacité de la salle">
-                            </div>
-
-                            <!-- Faire une boucle pour récupérer les catégories -->
-
-                            <div class="form-group">
-                                <label>Catégorie</label>
-                                <select class="form-control">
-                                    <option>Réunion</option>
-                                    <option>Bureau</option>
-                                    <option>Formation</option>
-                                </select>
-                            </div>
-
-                    </div>
-
-                    <div class="col-lg-6"> <!-- formulaire coté droit -->
-
-                            <div class="form-group">
-                                <label>Pays</label>
-                                <input class="form-control" placeholder="Pays dans laquelle se trouve la salle">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Ville</label>
-                                <input class="form-control" placeholder="Ville dans laquelle se trouve la salle">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Adresse</label>
-                                <textarea class="form-control" rows="3" placeholder="Adresse de la salle"></textarea>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label>Code Postal</label>
-                                <input class="form-control" placeholder="Code Postal de la ville dans laquelle se trouve la salle">
-                            </div>
-
-                            <button type="submit" class="btn btn-default">Submit Button</button>
-
-                        </form>
-
-                    </div>
-
-                </div>
-
-                <!-- FIN FORMULAIRE -->
-
 
             </div>
             <!-- /.container-fluid -->
