@@ -203,7 +203,7 @@ if($_POST) {
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Bonjour Admin !<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="../connexion.php?action=deconnexion"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
@@ -220,17 +220,17 @@ if($_POST) {
 
                     </li>
                     <li>
-                        <a href="gestion_membres.html"><i class="fa fa-fw fa-table"></i>Gestion des membres</a>
+                        <a href="gestion_membres.php"><i class="fa fa-fw fa-table"></i>Gestion des membres</a>
                     </li>
                     <li>
-                        <a href="gestion_salles.html"><i class="fa fa-fw fa-table"></i>Gestion des salles</a>
+                        <a href="gestion_salles.php"><i class="fa fa-fw fa-table"></i>Gestion des salles</a>
                     </li>
                     <li>
 
-                        <a href="gestion_produits.html"><i class="fa fa-fw fa-table"></i>Gestion des produits</a>
+                        <a href="gestion_produits.php"><i class="fa fa-fw fa-table"></i>Gestion des produits</a>
                     </li>
                     <li>
-                        <a href="gestion_avis.html"><i class="fa fa-fw fa-star"></i>Gestion des avis</a>
+                        <a href="gestion_avis.php"><i class="fa fa-fw fa-star"></i>Gestion des avis</a>
                     </li>
                     <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Theme <i class="fa fa-fw fa-caret-down"></i></a>
